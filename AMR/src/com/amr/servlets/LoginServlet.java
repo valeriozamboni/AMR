@@ -37,6 +37,7 @@ public class LoginServlet extends HttpServlet {
 	    String pass = request.getParameter("loginPassword");
 	    
 	    User user = Connector.getUserFromCredentials(email, pass);
+	    
    
 	    if(user == null){
 	    RequestDispatcher view = request.getRequestDispatcher("login.jsp");
