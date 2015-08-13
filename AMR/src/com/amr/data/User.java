@@ -10,6 +10,7 @@ public class User {
 	private String pass;
 	private boolean admin;
 	
+	
 	public User(String nome, String cognome, String cf, String residenza, String email, String pass, boolean admin) {
 		super();
 		this.nome = nome;
