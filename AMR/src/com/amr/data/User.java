@@ -8,7 +8,7 @@ public class User {
 	private String residenza;
 	private String email;
 	private String pass;
-	private boolean admin;
+	private boolean admin; 
 	
 	public User(String nome, String cognome, String cf, String residenza, String email, String pass, boolean admin) {
 		super();
