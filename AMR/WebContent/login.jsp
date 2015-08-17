@@ -3,6 +3,14 @@
 <html>
 <head>
 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
     <title>AMR Login</title>
 	
 	<!-- jquery -->
@@ -25,49 +33,48 @@
 
   <body>
 
-
+<%session.invalidate();%>
 
 
     <div class="container" id="login_container">
 
-   <form class="form-signin"  action="LoginServlet"  method="post">
+   <form class="form-signin" id="login_form" action="Login"  method="post">
 	  <div id="login_form">
         <h2 class="form-signin-heading">Login</h2>
         <label for="loginEmail" class="sr-only">Email address</label>
-        <input type="email" name="loginEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+        <input type="email" name="loginEmail" class="form-control" placeholder="Email address" >
         <label for="loginPassword" class="sr-only">Password</label>
-        <input type="password" name="loginPassword" class="form-control" placeholder="Password" required="">
+        <input type="password" name="loginPassword" class="form-control" placeholder="Password">
 		</div>
 		
         <br>
         <button class="btn btn-lg btn-primary btn-block" id="login_button" type="submit">Login</button>
-        
       </form>
-      <form class="form-signin">  
-	  <button class="btn btn-lg btn-primary btn-block" id="go_reg_button" type="submit">Registrati</button>
-      </form>
+      <div class="form-signin"> 
+       <button class="btn btn-lg btn-primary btn-block" id="go_reg_button" >Registrati</button>
+      </div>
 	  
     </div> 
     
     <div class = "container" id="reg_container" style="display: none;">
-    	<form class="form-signin"  action="LoginServlet"  method="get">
+    	<form class="form-signin" id="reg_form" action="Registrati"  method="post">
     	<div id="reg_form" >
         <h2 class="form-signin-heading">Dati Personali</h2>
         <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" name="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+        <input type="email" name="inputEmail" class="form-control" placeholder="Email address" >
         <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" name="inputPassword" class="form-control" placeholder="Password" required="">
+        <input type="password" name="inputPassword" class="form-control" placeholder="Password" >
 		<label for="inputNome" class="sr-only">Nome</label>
-        <input type="text" id="inputNome" class="form-control" placeholder="Nome" required="">
+        <input type="text" name="inputNome" class="form-control" placeholder="Nome" >
 		<label for="inputCognome" class="sr-only">Cognome</label>
-        <input type="text" id="inputCognome" class="form-control" placeholder="Cognome" required="">
+        <input type="text" name="inputCognome" class="form-control" placeholder="Cognome" >
 		<label for="inputCF" class="sr-only">Codice Fiscale</label>
-        <input type="text" id="inputCF" class="form-control" placeholder="Codice Fiscale" required="">
+        <input type="text" name="inputCF" class="form-control" placeholder="Codice Fiscale" >
 		<label for="inputResidenza" class="sr-only">Residenza</label>
-        <input type="text" id="inputResidenza" class="form-control" placeholder="Residenza" required="">
+        <input type="text" name="inputResidenza" class="form-control" placeholder="Residenza" >
 	<br>
       </div>
-      		<button class="btn btn-lg btn-primary btn-block" id="reg_button" type="submit">Registrati</button>
+      		<button class="btn btn-lg btn-primary btn-block" id="reg_button" >Registrati</button>
       </form>
       <div class="form-signin">
       <button class="btn btn-lg btn-primary btn-block" id="back_button">Indietro</button>

@@ -6,12 +6,19 @@ public class User {
 	private String cognome;
 	private String cf;
 	private String residenza;
-	private String email;
+	private String email; 
 	private String pass;
-	private boolean admin; 
+	private boolean admin;
+	private boolean affiliato;
 	
+	private boolean logged;
+	 
 	
-	public User(String nome, String cognome, String cf, String residenza, String email, String pass, boolean admin) {
+	public User(){
+		   
+	} 
+	
+	public User(String nome, String cognome, String cf, String residenza, String email, String pass, boolean admin, boolean affiliato) {
 		super();
 		this.nome = nome;
 		this.cognome = cognome;
@@ -20,6 +27,7 @@ public class User {
 		this.email = email;
 		this.pass = pass;
 		this.admin = admin;
+		this.logged = true;
 	}
 
 	public String getNome() {
@@ -76,6 +84,22 @@ public class User {
 
 	public void setAdmin(boolean admin) {
 		this.admin = admin;
+	}
+
+	public boolean isAffiliato() {
+		return affiliato;
+	}
+
+	public void setAffiliato(boolean affiliato) {
+		this.affiliato = affiliato;
+	}
+
+	public boolean isLogged() {
+		return logged;
+	}
+
+	public void setLogged(boolean logged) {
+		this.logged = logged;
 	}
 	
 	

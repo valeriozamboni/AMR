@@ -1,11 +1,13 @@
-
-
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
 <%@ page import='com.amr.data.User' %>
 
-<html>
-  <head>
-     
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>title</title>
+
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
 	<script type="text/javascript" src="jquery-2.1.3.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
@@ -13,11 +15,14 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<link href="style.css" rel="stylesheet" type="text/css">
 
-  </head>
-  <body>
-  
-    <jsp:useBean id="utente" scope="session" class="com.amr.data.User"/>
+</head>
+<body>
+
+<jsp:useBean id="utente" scope="session" class="com.amr.data.User"/>
+
+
   <%
+  
   User user = (User)request.getAttribute("user");
   if(user != null){
 	  utente.setNome(user.getNome());
@@ -30,16 +35,18 @@
 	  utente.setResidenza(user.getResidenza());
   }
   
-
-  if(utente.getEmail() == null){
+  String message = (String)request.getAttribute("message");
+  boolean admin = false;
+  if(utente.getEmail() != null){
+	  admin = utente.isAdmin();
+  }else{
 	  %>
 	  <jsp:forward page="login.jsp" />
 	  <%
   }
-  boolean admin = utente.isAdmin();
   
   %>
-  
+
   <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
@@ -81,7 +88,7 @@
             <li><a href="#">Elimina Tavolo</a></li>
           </ul>
         </li>
-					<li id="gest_affilia"><a href="affiliaazienda.jsp">Affilia Azienda</a></li>
+					<li id="gest_affilia"><a href="#">Affilia Azienda</a></li>
 
 		
 		
@@ -104,18 +111,25 @@
         </div>
       </div>
     </nav>
-  
-  
-	<div class="container theme-showcase" id="main_container" role="main">
-		<div class="jumbotron">
-			<h1>Title</h1>
-			<p>sottotitolo</p> 
-		</div>
-	</div>
+    <br>
+  <br>
+  <br>
+      <div class="row">
+     <div class="col-md-6 col-md-offset-3">
+     <h1><%=message%></h1>
+     </div></div>
+     
+     
+<br>
+<div class="row">
+     <div class="col-md-4 col-md-offset-5">
+     <form action="home.jsp">
+    <input type="submit" class="btn btn-default" value="HOME">
+</form>
+     </div></div>
+<br>
 
-
-
-	<script>
+<script>
 	<%
 	if(admin){
 		%>
@@ -135,8 +149,9 @@
 	
 	
 
-	</script>		
+	</script>	
+  
+  
 
 </body>
 </html>
-

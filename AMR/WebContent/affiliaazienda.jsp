@@ -1,5 +1,5 @@
-
-
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <%@ page import='com.amr.data.User' %>
 
@@ -8,6 +8,9 @@
      
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
 	<script type="text/javascript" src="jquery-2.1.3.min.js"></script>
+		<script src="http://jqueryvalidation.org/files/dist/jquery.validate.min.js"></script>
+<script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
+	
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
@@ -18,25 +21,14 @@
   
     <jsp:useBean id="utente" scope="session" class="com.amr.data.User"/>
   <%
-  User user = (User)request.getAttribute("user");
-  if(user != null){
-	  utente.setNome(user.getNome());
-	  utente.setCognome(user.getCognome());
-	  utente.setCf(user.getCf());
-	  utente.setEmail(user.getEmail());
-	  utente.setAdmin(user.isAdmin());
-	  utente.setAffiliato(user.isAffiliato());
-	  utente.setPass(user.getPass());
-	  utente.setResidenza(user.getResidenza());
-  }
-  
-
-  if(utente.getEmail() == null){
+  boolean admin = false;
+  if(utente.getEmail() != null){
+	  admin = utente.isAdmin();
+  }else{
 	  %>
 	  <jsp:forward page="login.jsp" />
 	  <%
   }
-  boolean admin = utente.isAdmin();
   
   %>
   
@@ -81,7 +73,7 @@
             <li><a href="#">Elimina Tavolo</a></li>
           </ul>
         </li>
-					<li id="gest_affilia"><a href="affiliaazienda.jsp">Affilia Azienda</a></li>
+					<li id="gest_affilia"><a href="#">Affilia Azienda</a></li>
 
 		
 		
@@ -104,14 +96,44 @@
         </div>
       </div>
     </nav>
+  <br>
+  <br>
+  <br>
+      <div class="row">
+     <div class="col-md-6 col-md-offset-3">
+     <h1>Inserisci dati azienda</h1>
+     </div></div>
+<br>
+<br>
   
+      <div class="row">
+    <div class="col-md-10 col-md-offset-3">
+    <form class="form-horizontal" id="affilia" action="AffiliaAzienda"  method="post">
+    
+    			  <div class="form-group">
+    <label class="control-label col-sm-2" for="nome">Nome Azienda:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" name="nome" placeholder="Nome Azienda">
+    </div>
+  </div>
   
-	<div class="container theme-showcase" id="main_container" role="main">
-		<div class="jumbotron">
-			<h1>Title</h1>
-			<p>sottotitolo</p> 
-		</div>
-	</div>
+      			  <div class="form-group">
+    <label class="control-label col-sm-2" for="cod">Codice Affiliazione:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" name="cod" placeholder="Codice">
+    </div>
+  </div>
+  
+    <div class="form-group"> 
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">SALVA</button>
+    </div>
+  </div>
+    
+  </form>
+  </div>
+  </div>
+	
 
 
 
@@ -132,6 +154,34 @@
 	}
 	
 	%>
+	
+	$("#affilia").validate({
+        rules: {
+            nome: {
+                required: true,
+                minlength: 2
+            },
+            cod: {
+                required: true,
+                minlength: 2
+            },
+            highlight: function(element) {
+                $(element).closest('.form-group').addClass('has-error');
+            },
+            unhighlight: function(element) {
+                $(element).closest('.form-group').removeClass('has-error');
+            },
+            errorElement: 'span',
+            errorClass: 'help-block',
+            errorPlacement: function(error, element) {
+                if(element.parent('.input-group').length) {
+                    error.insertAfter(element.parent());
+                } else {
+                    error.insertAfter(element);
+                }
+            }
+        }
+    });
 	
 	
 

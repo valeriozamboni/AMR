@@ -45,3 +45,12 @@ font-size: 25px;
 width: 200px;
 height: 150%;
 }
+
+body {
+  padding-top: 60px;
+}
+@media (max-width: 979px) {
+  body {
+    padding-top: 0px;
+  }
+}
