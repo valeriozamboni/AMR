@@ -109,7 +109,7 @@
     <br>
     
     <div class="row">
-    <div class="col-md-10 col-md-offset-3">
+    <div class="col-md-7 col-md-offset-3">
     <form class="form-horizontal" id="mod_form" action="ModificaProfilo"  method="post">
     
     <input style="display:none" type="text" name="fakeusernameremembered"/>
@@ -119,55 +119,55 @@
     
 			  <div class="form-group">
     <label class="control-label col-sm-2" for="email">Email:</label>
-    <div class="col-sm-10">
+    <div class="col-sm-7">
       <input type="email" class="form-control" name="email" placeholder="Enter email" value=<%=utente.getEmail() %>>
     </div>
   </div>
   
     <div class="form-group">
     <label class="control-label col-sm-2" for="pwd">Password corrente:</label>
-    <div class="col-sm-10"> 
+    <div class="col-sm-7"> 
       <input type="password" name="pwd" class="form-control" placeholder="Enter password" value=<%=utente.getPass() %>>
     </div>
   </div>
   
   <div class="form-group">
     <label class="control-label col-sm-2" for="new_pwd">Nuova password:</label>
-    <div class="col-sm-10"> 
+    <div class="col-sm-7"> 
       <input type="password" class="form-control" name="new_pwd" id="new_pwd" placeholder="Enter password">
     </div>
   </div>
   
     <div class="form-group">
     <label class="control-label col-sm-2" for="new_pwd_chk">Inserisci di nuovo la password:</label>
-    <div class="col-sm-10"> 
+    <div class="col-sm-7"> 
       <input type="password" class="form-control" name="new_pwd_chk" placeholder="Enter password" >
     </div>
   </div>
   
     <div class="form-group">
     <label class="control-label col-sm-2" for="nome">Nome:</label>
-    <div class="col-sm-10"> 
+    <div class="col-sm-7"> 
       <input type="text" class="form-control" name="nome" placeholder="Nome" value=<%=utente.getNome() %>>
     </div>
   </div>
       <div class="form-group">
     <label class="control-label col-sm-2" for="cognome">Cognome:</label>
-    <div class="col-sm-10"> 
+    <div class="col-sm-7"> 
       <input type="text" class="form-control" name="cognome" placeholder="Cognome" value=<%=utente.getCognome() %>>
     </div>
   </div>
   
         <div class="form-group">
     <label class="control-label col-sm-2" for="residenza">Residenza:</label>
-    <div class="col-sm-10"> 
+    <div class="col-sm-7"> 
       <input type="text" class="form-control" name="residenza" placeholder="Residenza" value=<%=utente.getResidenza() %>>
     </div>
   </div>
   
         <div class="form-group">
     <label class="control-label col-sm-2" for="cf">Codice Fiscale:</label>
-    <div class="col-sm-10"> 
+    <div class="col-sm-7"> 
       <input type="text" class="form-control" name="cf" placeholder="Codice Fiscale" value=<%=utente.getCf() %>>
     </div>
   </div>
@@ -177,12 +177,17 @@
   <br>
 
   <div class="form-group"> 
-    <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default">SALVA</button>
+    <div class="col-md-7 col-md-offset-2">
+      <button type="submit" class="btn btn-lg btn-primary btn-block">SALVA</button>
     </div>
   </div>
   
   </form>
+  <div class="row">
+     <div class="col-md-7 col-md-offset-2">
+     <form action="home.jsp">
+    <input type="submit" class="btn btn-lg btn-primary btn-block" value="INDIETRO">
+</form>
 		</div>
     </div>
     
@@ -235,16 +240,16 @@
 	            },
 	            pwd: {
 	            	required: true,
-	            	minlength: 5,
+	            	minlength: 4,
 	            	equals: "<%=utente.getPass()%>"
 	            	
 	            },
 	            new_pwd: {
-	            	minlength: 5
+	            	minlength: 4
 	            },
 	            new_pwd_chk: {
 	            	equalTo: "#new_pwd",
-	            	minlength: 5
+	            	minlength: 4
 	            },
 	            highlight: function(element) {
 	                $(element).closest('.form-group').addClass('has-error');

@@ -18,7 +18,7 @@ import com.amr.db.Connector;
 public class AffiliaAzienda extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
+    /** 
      * @see HttpServlet#HttpServlet()
      */
     public AffiliaAzienda() {

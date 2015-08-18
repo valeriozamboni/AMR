@@ -107,30 +107,37 @@
 <br>
   
       <div class="row">
-    <div class="col-md-10 col-md-offset-3">
+    <div class="col-md-7 col-md-offset-3">
     <form class="form-horizontal" id="affilia" action="AffiliaAzienda"  method="post">
     
     			  <div class="form-group">
     <label class="control-label col-sm-2" for="nome">Nome Azienda:</label>
-    <div class="col-sm-10">
+    <div class="col-sm-7">
       <input type="text" class="form-control" name="nome" placeholder="Nome Azienda">
     </div>
   </div>
   
       			  <div class="form-group">
     <label class="control-label col-sm-2" for="cod">Codice Affiliazione:</label>
-    <div class="col-sm-10">
+    <div class="col-sm-7">
       <input type="text" class="form-control" name="cod" placeholder="Codice">
     </div>
   </div>
-  
+  	<br>
+
     <div class="form-group"> 
-    <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default">SALVA</button>
+    <div class="col-sm-offset-2 col-sm-7">
+      <button type="submit" class="btn btn-lg btn-primary btn-block">SALVA</button>
     </div>
   </div>
-    
+
   </form>
+<div class="row">
+     <div class="col-md-7 col-md-offset-2">
+     <form action="home.jsp">
+    <input type="submit" class="btn btn-lg btn-primary btn-block" value="INDIETRO">
+</form>
+     </div></div>
   </div>
   </div>
 	

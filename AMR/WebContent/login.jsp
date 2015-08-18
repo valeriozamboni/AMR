@@ -12,7 +12,6 @@
     <meta name="author" content="">
 
     <title>AMR Login</title>
-	
 	<!-- jquery -->
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
 	<script type="text/javascript" src="jquery-2.1.3.min.js"></script>
@@ -24,11 +23,13 @@
 
     <!-- Custom styles for this template -->
     <link href="http://getbootstrap.com/examples/signin/signin.css" rel="stylesheet">
+    
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="./Signin Template for Bootstrap_files/ie-emulation-modes-warning.js"></script><style type="text/css"></style>
-
+    <script src="./ie-emulation-modes-warning.js"></script><style type="text/css"></style>
+		<link href="style.css" rel="stylesheet" type="text/css">
+	
   </head>
 
   <body>
@@ -50,7 +51,7 @@
         <br>
         <button class="btn btn-lg btn-primary btn-block" id="login_button" type="submit">Login</button>
       </form>
-      <div class="form-signin"> 
+      <div class="form-signin" id="form-back"> 
        <button class="btn btn-lg btn-primary btn-block" id="go_reg_button" >Registrati</button>
       </div>
 	  
@@ -76,7 +77,7 @@
       </div>
       		<button class="btn btn-lg btn-primary btn-block" id="reg_button" >Registrati</button>
       </form>
-      <div class="form-signin">
+      <div class="form-signin" id="form-back-2">
       <button class="btn btn-lg btn-primary btn-block" id="back_button">Indietro</button>
       </div>
     </div>

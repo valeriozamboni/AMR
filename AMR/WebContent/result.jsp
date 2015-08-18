@@ -4,6 +4,7 @@
 <html>
 <head>
 <%@ page import='com.amr.data.User' %>
+<meta http-equiv="refresh" content="3;url=home.jsp" />
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>title</title>
@@ -17,7 +18,6 @@
 
 </head>
 <body>
-
 <jsp:useBean id="utente" scope="session" class="com.amr.data.User"/>
 
 
