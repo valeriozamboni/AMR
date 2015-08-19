@@ -2,6 +2,7 @@ package com.amr.data;
 
 public class User {
 	
+	private int id;
 	private String nome;
 	private String cognome;
 	private String cf;
@@ -20,6 +21,19 @@ public class User {
 	
 	public User(String nome, String cognome, String cf, String residenza, String email, String pass, boolean admin, boolean affiliato) {
 		super();
+		this.nome = nome;
+		this.cognome = cognome;
+		this.cf = cf;
+		this.residenza = residenza;
+		this.email = email;
+		this.pass = pass;
+		this.admin = admin;
+		this.logged = true;
+	}
+	
+	public User(int id, String nome, String cognome, String cf, String residenza, String email, String pass, boolean admin, boolean affiliato) {
+		super();
+		this.id = id;
 		this.nome = nome;
 		this.cognome = cognome;
 		this.cf = cf;
@@ -100,6 +114,14 @@ public class User {
 
 	public void setLogged(boolean logged) {
 		this.logged = logged;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	

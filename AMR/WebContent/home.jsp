@@ -28,6 +28,7 @@
 	  utente.setAffiliato(user.isAffiliato());
 	  utente.setPass(user.getPass());
 	  utente.setResidenza(user.getResidenza());
+	  utente.setId(user.getId());
   }
   
 
@@ -54,7 +55,7 @@
     </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-			<li id="sel_menu"><a href="#">Seleziona Menu</a></li>
+			<li id="sel_menu"><a href="selezionamenu.jsp">Seleziona Menu</a></li>
 		
 		<li id="prenotazioni" class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prenotazioni <span class="caret"></span></a>
@@ -67,7 +68,7 @@
 		<li id="gest_menu" class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestisci Menu Affiliati<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Crea Menu</a></li>
+            <li id="gest_creamenù"><a href="creamenu.jsp">Crea Menu</a></li>
 			<li><a href="#">Modifica Menu</a></li>
             <li><a href="#">Elimina Menu</a></li>
           </ul>

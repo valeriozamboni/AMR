@@ -2,17 +2,23 @@
 
 <!DOCTYPE html>
 <%@ page import='com.amr.data.User' %>
+<%@ page import='com.amr.db.Connector' %>
+<%@ page import='java.util.ArrayList' %>
 
 <html>
   <head>
      
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
 	<script type="text/javascript" src="jquery-2.1.3.min.js"></script>
+		  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	
 	<script src="http://jqueryvalidation.org/files/dist/jquery.validate.min.js"></script>
 <script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
 	
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+	
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<link href="style.css" rel="stylesheet" type="text/css">
 
@@ -22,19 +28,20 @@
   <%
   boolean admin = false;
   String pass = null;
-  
+  int id = -1;
+
   if(utente.getEmail() != null){
 	  admin = utente.isAdmin();
 	  pass = utente.getPass();
+	  id = utente.getId();
+
   }else{
 	  %>
 	  <jsp:forward page="login.jsp" />
 	  <%
   }
-  
-  //User user = (User)request.getAttribute("user"); 
-  //boolean admin = user.isAdmin();
   %>
+  
   <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
@@ -103,76 +110,90 @@
     <br>
     <div class="row">
      <div class="col-md-6 col-md-offset-3">
-     <h1>Modifica le tue informazioni</h1>
+     <h1>Seleziona i Piatti</h1>
      </div></div>
-    <br>
-    <br>
-    
-    <div class="row">
+
+	
+	
+	<div class="row" id="alert-row" style="display:none">
     <div class="col-md-7 col-md-offset-3">
-    <form class="form-horizontal" id="mod_form" action="ModificaProfilo"  method="post">
+    <div class="alert alert-warning" >
+  <strong>Attenzione!</strong> Il menù non è stato ancora inserito per il giorno selezionato.  Riprova in seguito.
+</div>
+    </div>
+    </div>
     
+    	<div class="row" id="alert-row" style="display:none">
+    <div class="col-md-7 col-md-offset-3">
+    <div class="alert alert-warning" >
+  <strong>Attenzione!</strong> Le scelte sono già state effettuate per il giorno selezionato. Sarà possibile ora modificarle.
+</div>
+    </div>
+    </div>
+    
+    
+    <div class="row" >
+    <div class="col-md-7 col-md-offset-3">
+    <form class="form-horizontal" id="crea_form" action="AddSceltaGiornaliera"  method="post">
+    
+    			  <div class="form-group">
+    <label class="control-label col-sm-2" for="date">Giorno:</label>
+    <div class="col-sm-7">
+    <input type="text" class="form-control" id="datepicker" name="date" placeholder="Seleziona un giorno">
+    </div>
+  </div>
+    
+    
+    
+    <div id ="fields_div" style="display:none">
     <input style="display:none" type="text" name="fakeusernameremembered"/>
 <input style="display:none" type="password" name="fakepasswordremembered"/>
     
     
     
 			  <div class="form-group">
-    <label class="control-label col-sm-2" for="email">Email:</label>
+    <label class="control-label col-sm-2" for="selprimo">seleziona primo:</label>
     <div class="col-sm-7">
-      <input type="email" class="form-control" name="email" placeholder="Enter email" value=<%=utente.getEmail() %>>
-    </div>
+<select class="form-control" id="selprimo" name= "selprimo" >
+      <option disabled selected value=""> -- seleziona un primo --</option>
+      </select>
+     </div>
   </div>
+  
+    
+  
+  <br>
+  <br>
+  
+  
   
     <div class="form-group">
-    <label class="control-label col-sm-2" for="pwd">Password corrente:</label>
+    <label class="control-label col-sm-2" for="selsecondo">seleziona secondo:</label>
     <div class="col-sm-7"> 
-      <input type="password" name="pwd" class="form-control" placeholder="Enter password" value=<%=utente.getPass() %>>
+	<select class="form-control" id="selsecondo" name= "selsecondo" >
+	<option disabled selected value= ""> -- seleziona un secondo --
+      </option>
+	</select>
     </div>
   </div>
   
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="new_pwd">Nuova password:</label>
-    <div class="col-sm-7"> 
-      <input type="password" class="form-control" name="new_pwd" id="new_pwd" placeholder="Enter password">
-    </div>
-  </div>
+    
   
-    <div class="form-group">
-    <label class="control-label col-sm-2" for="new_pwd_chk">Inserisci di nuovo la password:</label>
-    <div class="col-sm-7"> 
-      <input type="password" class="form-control" name="new_pwd_chk" placeholder="Enter password" >
-    </div>
-  </div>
-  
-    <div class="form-group">
-    <label class="control-label col-sm-2" for="nome">Nome:</label>
-    <div class="col-sm-7"> 
-      <input type="text" class="form-control" name="nome" placeholder="Nome" value=<%=utente.getNome() %>>
-    </div>
-  </div>
-      <div class="form-group">
-    <label class="control-label col-sm-2" for="cognome">Cognome:</label>
-    <div class="col-sm-7"> 
-      <input type="text" class="form-control" name="cognome" placeholder="Cognome" value=<%=utente.getCognome() %>>
-    </div>
-  </div>
+   <br>
+  <br>
   
         <div class="form-group">
-    <label class="control-label col-sm-2" for="residenza">Residenza:</label>
+    <label class="control-label col-sm-2" for="selcontorno">selziona contorno:</label>
     <div class="col-sm-7"> 
-      <input type="text" class="form-control" name="residenza" placeholder="Residenza" value=<%=utente.getResidenza() %>>
+      <select class="form-control" id="selcontorno" name= "selcontorno" >
+      <option disabled selected value=""> -- seleziona un contorno --
+      </option>
+	</select>
     </div>
   </div>
-  
-        <div class="form-group">
-    <label class="control-label col-sm-2" for="cf">Codice Fiscale:</label>
-    <div class="col-sm-7"> 
-      <input type="text" class="form-control" name="cf" placeholder="Codice Fiscale" value=<%=utente.getCf() %>>
-    </div>
-  </div>
-  
-  <input type="hidden" name="oldemail" value=<%=utente.getEmail() %>>
+     
+ <input style="display:none" type="text" name="userid" value="<%=id %>"/>
+  <input style="display:none" type="text" id="menuid" name="menuid"/>
   
   <br>
 
@@ -181,7 +202,7 @@
       <button type="submit" class="btn btn-lg btn-primary btn-block">SALVA</button>
     </div>
   </div>
-  
+  </div>
   </form>
   <div class="row">
      <div class="col-md-7 col-md-offset-2">
@@ -192,10 +213,9 @@
     </div>
     
     
-    
-  
-
-
+    </div>
+    </div>
+ 
 
 
 	<script>
@@ -216,46 +236,29 @@
 	
 	%>
 	
+	jQuery.validator.addMethod("notEqual", function(value, element, param) {
+		  return this.optional(element) || value != param;
+		}, "Please specify a different (non-default) value");
 	
-	jQuery.validator.addMethod("equals", function(value, element, param) { 
-		  return this.optional(element) || value === param; 
-		}, "You must enter {0}");
-	
-	    $("#mod_form").validate({
+	    $("#crea_form").validate({
 	        rules: {
-	            nome: {
-	                required: true,
-	                minlength: 2
+	        	selprimo: {
+	                notEqual: ""
+	                
 	            },
-	            cognome: {
-	                required: true,
-	                minlength: 2
+	            selsecondo: {
+	            	notEqual: ""
 	            },
-	            residenza: {
-	                required: true,
-	                minlength: 2
+	            selcontorno: {
+	            	notEqual: ""
 	            },
-	            cf: {
-	                required: true,
-	                minlength: 2
-	            },
-	            pwd: {
-	            	required: true,
-	            	minlength: 4,
-	            	equals: "<%=utente.getPass()%>"
-	            	
-	            },
-	            new_pwd: {
-	            	minlength: 4
-	            },
-	            new_pwd_chk: {
-	            	equalTo: "#new_pwd",
-	            	minlength: 4
-	            },
-	            highlight: function(element) {
+	            selprimo: function(element) {
 	                $(element).closest('.form-group').addClass('has-error');
 	            },
-	            unhighlight: function(element) {
+	            selsecondo: function(element) {
+	                $(element).closest('.form-group').removeClass('has-error');
+	            },
+	            selcontorno: function(element) {
 	                $(element).closest('.form-group').removeClass('has-error');
 	            },
 	            errorElement: 'span',
@@ -269,6 +272,68 @@
 	            }
 	        }
 	    });
+
+	    $(function() {
+	        $( "#datepicker" ).datepicker();
+	        $('#datepicker').change(function() {
+	        		$('#fields_div').css('display','inline');
+	        		$("#selprimo").empty();
+	        		$('#selprimo').append($("<option disabled selected></option>")
+	        				.attr("value","")
+       			         .text("-- seleziona un primo --"));
+	        		$("#selsecondo").empty();
+	        		$('#selsecondo').append($("<option disabled selected></option>")
+	        			 .attr("value","")
+       			         .text("-- seleziona un secondo --"));
+	        		$("#selcontorno").empty();
+	        		$('#selcontorno').append($("<option disabled selected></option>")
+	        			 .attr("value","")
+       			         .text("-- seleziona un contorno --"));
+	        		var date = $('#datepicker').val();
+	        		
+	        		$.get("/AMR/GetMenu?date="+date, function(responseText) {
+	        			if(!responseText == ""){
+		        			$('#alert-row').css('display','none');
+		        			
+		        			var res = JSON.parse(responseText);
+	 			       		var id = res.id
+	 			       		
+	 			       		
+	 			       		var primi = res.primi
+	 			       		var secondi = res.secondi
+	 			       		var contorni = res.contorni
+	 			       		$('#menuid').val(id)
+	 			       		primi.forEach(function(entry) {
+	 			       		$('#selprimo').append($("<option></option>")
+		        			         .attr("value",entry.id)
+		        			         .text(entry.nome));
+	 			      		});
+	 			       		secondi.forEach(function(entry) {
+	 			       		$('#selsecondo').append($("<option></option>")
+		        			         .attr("value",entry.id)
+		        			         .text(entry.nome));
+	 			      		});
+	 			       		contorni.forEach(function(entry) {
+	 			       		$('#selcontorno').append($("<option></option>")
+		        			         .attr("value",entry.id)
+		        			         .text(entry.nome));
+	 			      		});
+		        			
+		        			
+	        			}else{
+	        				$('#alert-row').css('display','inline');
+							$('#fields_div').css('display','none');
+	        			}
+	        			
+	        			
+	                });
+	        		
+	        	});
+	      });
+	    
+	
+
+ 
 
 	
 

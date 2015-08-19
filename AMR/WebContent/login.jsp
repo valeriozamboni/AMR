@@ -18,11 +18,13 @@
 
 	
 	
-    <!-- Bootstrap core CSS -->
-    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+<!--     Bootstrap core CSS -->
+<!--     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 
-    <!-- Custom styles for this template -->
-    <link href="http://getbootstrap.com/examples/signin/signin.css" rel="stylesheet">
+<!--     Custom styles for this template -->
+<!--     <link href="http://getbootstrap.com/examples/signin/signin.css" rel="stylesheet"> -->
+    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
     
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->

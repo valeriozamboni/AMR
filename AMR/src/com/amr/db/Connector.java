@@ -6,9 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.amr.data.Azienda;
+import com.amr.data.Menu;
 import com.amr.data.User;
 
 public class Connector {
@@ -49,7 +51,8 @@ public class Connector {
 			stmt = conn.createStatement();
 		    rs = stmt.executeQuery(sqlQuery);
 		    while(rs.next()){
-		    	usr = new User(rs.getString("Nome"),
+		    	usr = new User(rs.getInt("ClienteID"),
+		    			rs.getString("Nome"),
 		    			rs.getString("Cognome"),
 		    			rs.getString("CF"),
 		    			rs.getString("Residenza"),
@@ -170,6 +173,194 @@ public class Connector {
 		}
 
 	}
+	
+	public static Menu getMenuFromDate(String date){
+		Connection conn = getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
+		ResultSet rs_primi = null;
+		ResultSet rs_secondi = null;
+		ResultSet rs_contorni = null;
+		String sqlQuery = "select * from amr.menu where giorno = '" + date + "';";
+		Menu menu = null;
+		try {
+			stmt = conn.createStatement();
+		    rs = stmt.executeQuery(sqlQuery);
+		    int id = -1;
+		    while(rs.next()){
+		    	id = rs.getInt("ID_menu");
+		    	menu = new Menu(rs.getString("giorno"), id);
 
+		    }
+		    if(id> -1){
+			    String sqlPrimi = "select * from amr.primo where ID_menu = '" + id + "';";
+			    rs_primi = stmt.executeQuery(sqlPrimi);
+			    while(rs_primi.next()){
+			    	menu.addPrimo(rs_primi.getInt("ID_primo"),rs_primi.getString("nome"));
+			    }
+		    	String sqlSecondi = "select * from amr.secondo where ID_menu = '" + id + "';";
+		    	rs_secondi = stmt.executeQuery(sqlSecondi);
+			    while(rs_secondi.next()){
+			    	menu.addSecondo(rs_secondi.getInt("ID_secondo"),rs_secondi.getString("nome"));
+			    }
+		    	String sqlContorni = "select * from amr.contorno where ID_menu = '" + id + "';";
+		    	rs_contorni = stmt.executeQuery(sqlContorni);
+			    while(rs_contorni.next()){
+			    	menu.addContorno(rs_contorni.getInt("ID_contorno"),rs_contorni.getString("nome"));
+			    }
+
+		    }
+		     
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return menu;
+	}
+	
+	
+	public static void addMenu(String data, String primo_1, String primo_2, String primo_3, String sec_1, String sec_2, String sec_3, String contorno_1, String contorno_2, String contorno_3){
+		Connection conn = getConnection();
+		Statement stmt = null;
+		Menu menu = getMenuFromDate(data);
+		try {
+		String sqlQuery = "";
+		stmt = conn.createStatement();
+		if(menu==null){
+			sqlQuery = "insert into amr.menu (giorno) values ("+
+					"'" + data +
+					"')";
+			stmt.execute(sqlQuery);
+			menu = getMenuFromDate(data);
+
+		}else{
+			String removePrimi = "delete from amr.primo where ID_menu = '" + menu.getId() + "';";
+			stmt.execute(removePrimi);
+			String removeSecondi = "delete from amr.secondo where ID_menu = '" + menu.getId() + "';";
+			stmt.execute(removeSecondi);
+			String removeContorni = "delete from amr.contorno where ID_menu = '" + menu.getId() + "';";
+			stmt.execute(removeContorni);
+			String removeScelte = "delete from amr.sceltagiornaliera where ID_menu = '" + menu.getId() + "';";
+			stmt.execute(removeScelte);
+		}
+		
+		int id = menu.getId();
+		String sqlPrimo_1 = "insert into amr.primo (nome, ID_menu) values (" + 
+				"'" + primo_1 +
+				"', '" + id +
+				"')";
+		stmt.execute(sqlPrimo_1);
+		if(!primo_2.equals("")){
+			String sqlPrimo_2 = "insert into amr.primo (nome, ID_menu) values (" + 
+					"'" + primo_2 +
+					"', '" + id +
+					"')";
+			stmt.execute(sqlPrimo_2);
+		}
+		if(!primo_3.equals("")){
+			String sqlPrimo_3 = "insert into amr.primo (nome, ID_menu) values (" + 
+					"'" + primo_3 +
+					"', '" + id +
+					"')";
+			stmt.execute(sqlPrimo_3);
+		}
+		
+		String sqlSec_1 = "insert into amr.secondo (nome, ID_menu) values (" + 
+				"'" + sec_1 +
+				"', '" + id +
+				"')";
+		stmt.execute(sqlSec_1);
+		if(!sec_2.equals("")){
+			String sqlsec_2 = "insert into amr.secondo (nome, ID_menu) values (" + 
+					"'" + sec_2 +
+					"', '" + id +
+					"')";
+			stmt.execute(sqlsec_2);
+		}
+		if(!sec_3.equals("")){
+			String sqlsec_3 = "insert into amr.secondo (nome, ID_menu) values (" + 
+					"'" + sec_3 +
+					"', '" + id +
+					"')";
+			stmt.execute(sqlsec_3);
+		}
+		String sqlCont_1 = "insert into amr.contorno (nome, ID_menu) values (" + 
+				"'" + contorno_1 +
+				"', '" + id +
+				"')";
+		stmt.execute(sqlCont_1);
+		if(!contorno_2.equals("")){
+			String sqlContorno_2 = "insert into amr.contorno (nome, ID_menu) values (" + 
+					"'" + contorno_2 +
+					"', '" + id +
+					"')";
+			stmt.execute(sqlContorno_2);
+		}
+		if(!contorno_3.equals("")){
+			String sqlContorno_3 = "insert into amr.contorno (nome, ID_menu) values (" + 
+					"'" + contorno_3 +
+					"', '" + id +
+					"')";
+			stmt.execute(sqlContorno_3);
+		}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	public static String getPiattiList(String tipo){
+		Connection conn = getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
+		String sqlQuery = "select nome from amr."+tipo+";";
+		ArrayList<String> lists = new ArrayList<String>();
+		try {
+			stmt = conn.createStatement();
+		    rs = stmt.executeQuery(sqlQuery);
+		    while(rs.next()){
+		    	lists.add(rs.getString("nome"));
+		    	
+		    }
+		     
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return toJavascriptArray(lists);
+	}
+	
+	public static String toJavascriptArray(ArrayList<String> arr){
+	    StringBuffer sb = new StringBuffer();
+	    sb.append("[");
+	    for(int i=0; i<arr.size(); i++){
+	        sb.append("\"").append(arr.get(i)).append("\"");
+	        if(i+1 < arr.size()){
+	            sb.append(",");
+	        }
+	    }
+	    sb.append("]");
+	    return sb.toString();
+	}
+
+	public static void addScelta(int id_utente, int id_menu, int id_primo, int id_secondo, int id_contorno) {
+		Connection conn = getConnection();
+		Statement stmt = null;	
+		String sqlQuery = "insert into amr.sceltagiornaliera (ID_menu, ID_primo, ID_secondo, ID_contorno, ID_cliente) values ("+
+					id_menu +
+					", " + id_primo +
+					", " + id_secondo +
+					", " + id_contorno +
+					", " + id_utente +
+					")";
+
+		try {
+			stmt = conn.createStatement();
+			stmt.execute(sqlQuery);   
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		
+	}
 	
 }
