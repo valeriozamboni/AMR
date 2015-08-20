@@ -83,6 +83,7 @@
           </ul>
         </li>
 					<li id="gest_affilia"><a href="affiliaazienda.jsp">Affilia Azienda</a></li>
+					<li id="vis_scelte"><a href="visualizzascelte.jsp">Visualizza Scelte</a></li>
 
 		
 		
@@ -129,6 +130,7 @@
 		$("#gest_menu").css('display','none');
 		$("#gest_tavoli").css('display','none');
 		$("#gest_affilia").css('display','none');
+		$("#vis_scelte").css('display','none');
 	<%
 	}
 	

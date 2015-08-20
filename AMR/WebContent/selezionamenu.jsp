@@ -123,7 +123,7 @@
     </div>
     </div>
     
-    	<div class="row" id="alert-row" style="display:none">
+    	<div class="row" id="alert-row-2" style="display:none">
     <div class="col-md-7 col-md-offset-3">
     <div class="alert alert-warning" >
   <strong>Attenzione!</strong> Le scelte sono già state effettuate per il giorno selezionato. Sarà possibile ora modificarle.
@@ -323,10 +323,29 @@
 	        			}else{
 	        				$('#alert-row').css('display','inline');
 							$('#fields_div').css('display','none');
+							$('#alert-row-2').css('display','none');
 	        			}
 	        			
 	        			
+		        		$.get("/AMR/GetScelta?idMenu="+id+"&idCliente="+<%=id %>, function(responseText) {
+		        			if(!responseText == ""){
+		        				$('#alert-row-2').css('display','inline');
+			        			var scelta = JSON.parse(responseText);
+			        			var primo = scelta.primo.id
+			        			var secondo = scelta.secondo.id
+			        			var contorno = scelta.contorno.id
+			        			$('#selprimo').val(primo);
+			        			$('#selsecondo').val(secondo);
+			        			$('#selcontorno').val(contorno);
+		        			}else{
+		        				$('#alert-row-2').css('display','none');
+		        			}
+		                });
+	        			
+	        			
 	                });
+	        		
+
 	        		
 	        	});
 	      });

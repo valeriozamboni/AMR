@@ -1,8 +1,6 @@
 package com.amr.servlets;
 
 import java.io.IOException;
-import java.util.Date;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,19 +8,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.amr.data.Menu;
+import com.amr.data.Scelta;
 import com.amr.db.Connector;
 
 /**
- * Servlet implementation class GetMenu
+ * Servlet implementation class GetScelteCount
  */
-@WebServlet("/GetMenu")
-public class GetMenu extends HttpServlet {
+@WebServlet("/GetScelteCount")
+public class GetScelteCount extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetMenu() {
+    public GetScelteCount() {
         super();
     }
 
@@ -30,19 +29,19 @@ public class GetMenu extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    
-		Menu menu = Connector.getMenuFromDate(request.getParameter("date"));
-	    
-		String res = "";
-	    
-		if(menu!=null){
-	    	res = menu.getJson();
-	    }
-	    //System.out.println(menu.getDate() + " " + menu.getId());
-	    response.setContentType("text/plain");  // Set content type of the response so that jQuery knows what it can expect.
-	    response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
-	    response.getWriter().write(res);       // Write response body.
 
+
+			Menu menu = Connector.getMenuFromDate(request.getParameter("date"));
+	    
+			String res = "";
+		    
+			if(menu!=null){
+		    	res = menu.getJson();
+		    }
+		    //System.out.println(menu.getDate() + " " + menu.getId());
+		    response.setContentType("text/plain");  // Set content type of the response so that jQuery knows what it can expect.
+		    response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
+		    response.getWriter().write(res);       // Write response body.
 	}
 
 	/**
