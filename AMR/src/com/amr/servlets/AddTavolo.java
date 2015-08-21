@@ -12,16 +12,16 @@ import javax.servlet.http.HttpServletResponse;
 import com.amr.db.Connector;
 
 /**
- * Servlet implementation class AddMenu
+ * Servlet implementation class AggTavolo
  */
-@WebServlet("/AddMenu")
-public class AddMenu extends HttpServlet {
+@WebServlet("/AddTavolo")
+public class AddTavolo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AddMenu() {
+    public AddTavolo() {
         super();
     }
 
@@ -29,23 +29,14 @@ public class AddMenu extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String date = request.getParameter("date");
-	    String primo_1 = request.getParameter("primo_1");
-	    String primo_2 = request.getParameter("primo_2");
-	    String primo_3 = request.getParameter("primo_3");
-	    String sec_1 = request.getParameter("sec_1");
-	    String sec_2 = request.getParameter("sec_2");
-	    String sec_3 = request.getParameter("sec_3");
-	    String contorno_1 = request.getParameter("contorno_1");
-	    String contorno_2 = request.getParameter("contorno_2");
-	    String contorno_3 = request.getParameter("contorno_3");
+		String nome = request.getParameter("nome");
+	    int postiMin = Integer.parseInt(request.getParameter("PostiMin"));
+	    int postiMax = Integer.parseInt(request.getParameter("PostiMax"));
 	    
-	    Connector.addMenu(date, primo_1, primo_2, primo_3, sec_1, sec_2, sec_3, contorno_1, contorno_2, contorno_3);
+	    Connector.addTavolo(nome,postiMin,postiMax);
 	    RequestDispatcher view = request.getRequestDispatcher("result.jsp");
-	    request.setAttribute("message", "Menu inserito con successo!");
+	    request.setAttribute("message", "Tavolo inserito con successo!");
 	    view.forward(request, response);
-		
 	}
 
 	/**

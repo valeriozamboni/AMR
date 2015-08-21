@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.amr.data.Azienda;
 import com.amr.data.User;
 import com.amr.db.Connector;
 
@@ -36,13 +37,22 @@ public class Registrati extends HttpServlet {
 	    String cognome = request.getParameter("inputCognome");
 	    String cf = request.getParameter("inputCF");
 	    String res = request.getParameter("inputResidenza");
+	    String cod = request.getParameter("cod");
+	    Azienda az = Connector.getAziendaFromCod(cod);
+	   
 	    
-	    User user =  Connector.registerUser(email, pass, nome, cognome, cf, res, false);
+	    User user = null;
+	    if(az == null){
+	    	user =  Connector.registerUser(email, pass, nome, cognome, cf, res, 0, -1);
+	    }else{
+	    	user =  Connector.registerUser(email, pass, nome, cognome, cf, res, 1, az.getId());
+	    }
+	    
 	    
 	    if(user == null){
 		    RequestDispatcher view = request.getRequestDispatcher("login.jsp");
 		    request.setAttribute("error", true);
-			    view.forward(request, response);
+			view.forward(request, response);
 		    }else{
 		    	request.setAttribute("user", user);
 			    RequestDispatcher view = request.getRequestDispatcher("home.jsp");

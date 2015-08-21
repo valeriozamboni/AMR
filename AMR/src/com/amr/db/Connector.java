@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.amr.data.Azienda;
-import com.amr.data.CountScelta;
 import com.amr.data.CountScelte;
 import com.amr.data.Menu;
 import com.amr.data.Piatto;
@@ -18,9 +17,6 @@ import com.amr.data.User;
 
 public class Connector {
 	
-	
-
-
 	public static Connection getConnection(){
   
 		try {
@@ -84,6 +80,7 @@ public class Connector {
 		    rs = stmt.executeQuery(sqlQuery);
 		    while(rs.next()){
 		    	aziende.add(new Azienda(
+		    			rs.getInt("id"),
 		    			rs.getString("nome"),
 		    			rs.getString("codice")
 		    			)) ;
@@ -96,11 +93,11 @@ public class Connector {
 		return aziende;
 	}
 	
-	public static User registerUser(String email, String pass, String nome, String cognome, String cf, String res, Boolean affiliato){
+	public static User registerUser(String email, String pass, String nome, String cognome, String cf, String res, int affiliato, int idAzienda){
 		Connection conn = getConnection();
 		Statement stmt = null;
-		String sqlQuery = "insert into amr.cliente (nome, cognome, cf, residenza, email, password, affiliato, admin) values ('"
-				+ nome + "', '" + cognome + "', '" + cf + "', '" + res + "', '" + email + "', '" + pass + "', 0, 0);" 
+		String sqlQuery = "insert into amr.cliente (nome, cognome, cf, residenza, email, password, affiliato, admin, ID_azienda) values ('"
+				+ nome + "', '" + cognome + "', '" + cf + "', '" + res + "', '" + email + "', '" + pass + "', " + affiliato + ", 0, " + idAzienda + ");" 
 				;
 		User usr = null;
 		try {
@@ -113,6 +110,29 @@ public class Connector {
 		}
 		
 		return usr;
+	}
+	
+	public static Azienda getAziendaFromCod(String cod){
+		Connection conn = getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
+		String sqlQuery = "select * from amr.azienda where codice = '"+ cod + "';";
+		Azienda az = null;
+		try {
+			stmt = conn.createStatement();
+		    rs = stmt.executeQuery(sqlQuery);
+		    while(rs.next()){
+		    	az = new Azienda(rs.getInt("id"),
+		    			rs.getString("nome"),
+		    			rs.getString("codice")
+		    			);
+		    }
+		     
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return az;
 	}
 	
 	public static User modifyUser(String oldemail, String oldpass, String email, String pass, String nome, String cognome, String cf, String res, Boolean affiliato){
@@ -469,4 +489,22 @@ public class Connector {
 		return scelte;
 	}
 	
+	
+	public static void addTavolo(String nome, int postiMin, int postiMax){
+		Connection conn = getConnection();
+		Statement stmt = null;	
+		String sqlQuery = "insert into amr.tavolo (nome, postiMin, postiMax) values ("+
+					"'" + nome +
+					"', " + postiMin +
+					", " + postiMax +
+					")";
+
+		try {
+			stmt = conn.createStatement();
+			stmt.execute(sqlQuery);   
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
 }

@@ -77,6 +77,8 @@
         <input type="text" name="inputCF" class="form-control" placeholder="Codice Fiscale" >
 		<label for="inputResidenza" class="sr-only">Residenza</label>
         <input type="text" name="inputResidenza" class="form-control" placeholder="Residenza" >
+        <label for="cod" class="sr-only">Codice Affiliazione</label>
+        <input type="text" name="cod" class="form-control" placeholder="Codice Affiliazione" >
 	<br>
       </div>
       		<button class="btn btn-lg btn-primary btn-block" id="reg_button" >Registrati</button>

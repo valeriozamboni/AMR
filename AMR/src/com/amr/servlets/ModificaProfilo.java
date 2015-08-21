@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.amr.data.Azienda;
 import com.amr.data.User;
 import com.amr.db.Connector;
 
@@ -39,6 +40,9 @@ public class ModificaProfilo extends HttpServlet {
 	    String res = request.getParameter("residenza");
 	    String oldemail = request.getParameter("oldemail");
 	    String newpass = request.getParameter("new_pwd");
+	    
+	    String cod = request.getParameter("cod");
+	    Azienda az = Connector.getAziendaFromCod(cod);
 	    	    
 	    if(newpass.equals("")){
 	    	newpass = oldpass;
