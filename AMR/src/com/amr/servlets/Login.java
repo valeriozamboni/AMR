@@ -1,7 +1,6 @@
 package com.amr.servlets;
 
 import java.io.IOException;
-import java.sql.ResultSet;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

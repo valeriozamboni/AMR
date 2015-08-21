@@ -90,7 +90,7 @@
         </li>
 					<li id="gest_affilia"><a href="#">Affilia Azienda</a></li>
 
-		
+		<li id="vis_scelte"><a href="visualizzascelte.jsp">Visualizza Scelte</a></li>
 		
 			
           </ul>

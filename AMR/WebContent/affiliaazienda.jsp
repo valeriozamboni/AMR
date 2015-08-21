@@ -59,7 +59,7 @@
 		<li id="gest_menu" class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestisci Menu Affiliati<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Crea Menu</a></li>
+            <li><a href="creamenu.jsp">Crea Menu</a></li>
 			<li><a href="#">Modifica Menu</a></li>
             <li><a href="#">Elimina Menu</a></li>
           </ul>
@@ -75,7 +75,7 @@
         </li>
 					<li id="gest_affilia"><a href="#">Affilia Azienda</a></li>
 
-		
+		<li id="vis_scelte"><a href="visualizzascelte.jsp">Visualizza Scelte</a></li>
 		
 			
           </ul>

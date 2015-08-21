@@ -69,7 +69,7 @@
 		<li id="gest_menu" class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestisci Menu Affiliati<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Crea Menu</a></li>
+            <li><a href="creamenu.jsp">Crea Menu</a></li>
 			<li><a href="#">Modifica Menu</a></li>
             <li><a href="#">Elimina Menu</a></li>
           </ul>
@@ -100,7 +100,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%=utente.getEmail()%> <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Visualizza Profilo</a></li>
+            <li><a href="visualizzaprofilo.jsp">Visualizza Profilo</a></li>
             <li><a href="login.jsp">Logout</a></li>
           </ul>
         </li>
@@ -115,12 +115,13 @@
      <h1>Visualizza scelte</h1>
      </div></div>
 
-	
+	 <br>
+	  <br>
 	
 	<div class="row" id="alert-row" style="display:none">
     <div class="col-md-7 col-md-offset-3">
     <div class="alert alert-warning" >
-  <strong>Attenzione!</strong> Il menù non è stato ancora inserito per il giorno selezionato.  Riprova in seguito.
+  <strong>Attenzione!</strong> Non è stata ancora effettuata alcuna scelta per il giorno selezionato.  Riprova in seguito.
 </div>
     </div>
     </div>
@@ -138,14 +139,35 @@
     </div>
   </div>
     
+   <br>
     
+    <div class="row" >
+    <div class="col-md-7 col-md-offset-2">
     
     <div id ="fields_div" style="display:none">
     <input style="display:none" type="text" name="fakeusernameremembered"/>
 <input style="display:none" type="password" name="fakepasswordremembered"/>
     
-    
-  <table class="table table-striped" id="myTable">
+    <h2>Primi</h2>
+  <table class="table table-striped" id="primitable">
+    <thead>
+      <tr>
+        <th>Nome Piatto</th>
+        <th>Quantità</th>
+      </tr>
+    </thead>
+  </table>
+  <h2>Secondi</h2>
+    <table class="table table-striped" id="seconditable">
+    <thead>
+      <tr>
+        <th>Nome Piatto</th>
+        <th>Quantità</th>
+      </tr>
+    </thead>
+  </table>
+  <h2>Contorni</h2>
+    <table class="table table-striped" id="contornitable">
     <thead>
       <tr>
         <th>Nome Piatto</th>
@@ -155,7 +177,7 @@
   </table>
 </div> 
 
-			  
+		</div></div>	  
      
 
   <input style="display:none" type="text" id="menuid" name="menuid"/>
@@ -175,7 +197,7 @@
     
     </div>
     
- 
+ </div>
 
 
 	<script>
@@ -202,53 +224,36 @@
 	        $( "#datepicker" ).datepicker();
 	        $('#datepicker').change(function() {
 	        		$('#fields_div').css('display','inline');
-	        		$("#selprimo").empty();
-	        		$('#selprimo').append($("<option disabled selected></option>")
-	        				.attr("value","")
-       			         .text("-- seleziona un primo --"));
-	        		$("#selsecondo").empty();
-	        		$('#selsecondo').append($("<option disabled selected></option>")
-	        			 .attr("value","")
-       			         .text("-- seleziona un secondo --"));
-	        		$("#selcontorno").empty();
-	        		$('#selcontorno').append($("<option disabled selected></option>")
-	        			 .attr("value","")
-       			         .text("-- seleziona un contorno --"));
+	        		
 	        		var date = $('#datepicker').val();
 	        		
-	        		$.get("/AMR/GetMenu?date="+date, function(responseText) {
+	        		$.get("/AMR/GetScelteCount?date="+date, function(responseText) {
 	        			if(!responseText == ""){
-		        			$('#alert-row').css('display','none');
-		        			
-		        			var res = JSON.parse(responseText);
-	 			       		var id = res.id
-	 			       		
-	 			       		
-	 			       		var primi = res.primi
-	 			       		var secondi = res.secondi
-	 			       		var contorni = res.contorni
-	 			       		$('#menuid').val(id)
-	 			       		primi.forEach(function(entry) {
-	 			       		$('#selprimo').append($("<option></option>")
-		        			         .attr("value",entry.id)
-		        			         .text(entry.nome));
-	 			      		});
-	 			       		secondi.forEach(function(entry) {
-	 			       		$('#selsecondo').append($("<option></option>")
-		        			         .attr("value",entry.id)
-		        			         .text(entry.nome));
-	 			      		});
-	 			       		contorni.forEach(function(entry) {
-	 			       		$('#selcontorno').append($("<option></option>")
-		        			         .attr("value",entry.id)
-		        			         .text(entry.nome));
-	 			      		});
-		        			
-		        			
-	        			}else{
+ 		        			$('#alert-row').css('display','none');
+ 		        			$("#primitable").children().remove()
+ 		        			$("#seconditable").children().remove()
+ 		        			$("#contornitable").children().remove()
+ 		        			var res = JSON.parse(responseText);
+ 	 			       		var primi = res.primi
+ 	 			       		var secondi = res.secondi
+ 	 			       		var contorni = res.contorni
+ 	 			       		
+ 	 			       		primi.forEach(function(entry) {
+ 	 			       			addRow('primitable', entry.nome, entry.count)
+ 	 			       		});
+ 	 			       		
+ 	 			       		secondi.forEach(function(entry) {
+	 			       			addRow('seconditable', entry.nome, entry.count)
+	 			       		});
+ 	 			       		
+ 	 			       		contorni.forEach(function(entry) {
+ 			       				addRow('contornitable', entry.nome, entry.count)
+ 			       			});
+ 	 			       		
+ 	        			}else{
 	        				$('#alert-row').css('display','inline');
 							$('#fields_div').css('display','none');
-	        			}
+ 	        			}
 	        			
 	        			
 	                });
@@ -259,7 +264,19 @@
 	    
 
 	    
-	   
+	    function addRow(tableId, nome, count) {
+
+	        var table = document.getElementById(tableId);
+
+	        var rowCount = table.rows.length;
+	        var row = table.insertRow(rowCount);
+
+	        var cell3 = row.insertCell(0);
+	       cell3.innerHTML = nome;
+	       var cell4 = row.insertCell(1);
+	       cell4.innerHTML = count;
+	       
+	}
 	    
 
  

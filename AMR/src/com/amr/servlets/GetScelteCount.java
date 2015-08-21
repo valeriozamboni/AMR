@@ -1,14 +1,14 @@
 package com.amr.servlets;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.amr.data.Menu;
-import com.amr.data.Scelta;
+import com.amr.data.CountScelte;
 import com.amr.db.Connector;
 
 /**
@@ -31,14 +31,14 @@ public class GetScelteCount extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 
-			Menu menu = Connector.getMenuFromDate(request.getParameter("date"));
+			CountScelte scelte = Connector.getCountPrimi(request.getParameter("date"));
 	    
 			String res = "";
 		    
-			if(menu!=null){
-		    	res = menu.getJson();
+			if(scelte.isNotEmpty()){
+		    	res = scelte.getJson();
 		    }
-		    //System.out.println(menu.getDate() + " " + menu.getId());
+			//System.out.println(res);
 		    response.setContentType("text/plain");  // Set content type of the response so that jQuery knows what it can expect.
 		    response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
 		    response.getWriter().write(res);       // Write response body.

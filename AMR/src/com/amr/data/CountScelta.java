@@ -26,5 +26,11 @@ public class CountScelta {
 		this.count = count;
 	}
 	
+	public String getJson(){
+
+		return "{ \"nome\" : " + "\"" + this.nome + "\", \"count\": " + this.count + "}";
+		
+	}
+	
 	
 }

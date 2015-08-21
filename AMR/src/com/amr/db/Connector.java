@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.amr.data.Azienda;
 import com.amr.data.CountScelta;
+import com.amr.data.CountScelte;
 import com.amr.data.Menu;
 import com.amr.data.Piatto;
 import com.amr.data.Scelta;
@@ -423,27 +424,49 @@ public class Connector {
 		
 	}
 	
-	public ArrayList<CountScelta> getCountPrimi(String giorno){
+	public static CountScelte getCountPrimi(String giorno){
 		Connection conn = getConnection();
-		Statement stmt = null;	
-		ResultSet rs = null;
+		Statement stmt = null;
+		ResultSet rsp = null;
+		ResultSet rss = null;
+		ResultSet rsc = null;
 
-		String sqlQuery = "select count(*) as n, primo.nome as nome from menu inner join sceltagiornaliera"
-				+ " inner join primo where menu.giorno = '" + giorno + " and " +
+		String sqlPrimi = "select count(*) as n, primo.nome as nome from amr.menu inner join amr.sceltagiornaliera"
+				+ " inner join amr.primo where menu.giorno = '" + giorno + "' and " +
 				"menu.ID_menu = sceltagiornaliera.ID_menu and " +
 				"sceltagiornaliera.ID_primo = primo.ID_primo " +
 				"group by primo.ID_primo";
-		ArrayList<CountScelta> sceltePrimi = new ArrayList<CountScelta>();
+		String sqlSecondi = "select count(*) as n, secondo.nome as nome from amr.menu inner join amr.sceltagiornaliera"
+				+ " inner join amr.secondo where menu.giorno = '" + giorno + "' and " +
+				"menu.ID_menu = sceltagiornaliera.ID_menu and " +
+				"sceltagiornaliera.ID_secondo = secondo.ID_secondo " +
+				"group by secondo.ID_secondo";
+		String sqlContorni = "select count(*) as n, contorno.nome as nome from amr.menu inner join amr.sceltagiornaliera"
+				+ " inner join amr.contorno where menu.giorno = '" + giorno + "' and " +
+				"menu.ID_menu = sceltagiornaliera.ID_menu and " +
+				"sceltagiornaliera.ID_contorno = contorno.ID_contorno " +
+				"group by contorno.ID_contorno";
+		CountScelte scelte = new CountScelte();
 		try {	
 			stmt = conn.createStatement();
-			rs = stmt.executeQuery(sqlQuery);  
-			while(rs.next()){
-				sceltePrimi.add(new CountScelta(rs.getString("nome"), rs.getInt("n")));
+			rsp = stmt.executeQuery(sqlPrimi);  
+			while(rsp.next()){
+				scelte.addPrimo(rsp.getString("nome"), rsp.getInt("n"));
+			}
+			stmt = conn.createStatement();
+			rss = stmt.executeQuery(sqlSecondi);  
+			while(rss.next()){
+				scelte.addSecondo(rss.getString("nome"), rss.getInt("n"));
+			}
+			stmt = conn.createStatement();
+			rsc = stmt.executeQuery(sqlContorni); 
+			while(rsc.next()){
+				scelte.addContorno(rsc.getString("nome"), rsc.getInt("n"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return sceltePrimi;
+		return scelte;
 	}
 	
 }

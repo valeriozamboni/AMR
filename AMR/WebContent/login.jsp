@@ -37,9 +37,11 @@
   <body>
 
 <%session.invalidate();%>
+	
+  <div class="row">
+     <div class="col-md-4 col-md-offset-3">
 
-
-    <div class="container" id="login_container">
+    <div id="login_container">
 
    <form class="form-signin" id="login_form" action="Login"  method="post">
 	  <div id="login_form">
@@ -83,7 +85,8 @@
       <button class="btn btn-lg btn-primary btn-block" id="back_button">Indietro</button>
       </div>
     </div>
-	
+	</div>
+	</div>
 	<script>
 	
 $(document).ready(function(){
