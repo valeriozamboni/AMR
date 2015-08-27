@@ -124,26 +124,26 @@
     <label class="control-label col-sm-2" for="PostiMin">Posti Minimi:</label>
     <div class="col-sm-7">
 <select class="form-control" id="PostiMin" name= "PostiMin" >
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-      <option value="8">8</option>
-      <option value="9">9</option>
-      <option value="10">10</option>
-      <option value="11">11</option>
-      <option value="12">12</option>
-      <option value="13">13</option>
-      <option value="14">14</option>
-      <option value="15">15</option>
-      <option value="16">16</option>
-      <option value="17">17</option>
-      <option value="18">18</option>
-      <option value="19">19</option>
-      <option value="20">20</option>
+      <option value='1'>1</option>
+      <option value='2'>2</option>
+      <option value='3'>3</option>
+      <option value='4'>4</option>
+      <option value='5'>5</option>
+      <option value='6'>6</option>
+      <option value='7'>7</option>
+      <option value='8'>8</option>
+      <option value='9'>9</option>
+      <option value='10'>10</option>
+      <option value='11'>11</option>
+      <option value='12'>12</option>
+      <option value='13'>13</option>
+      <option value='14'>14</option>
+      <option value='15'>15</option>
+      <option value='16'>16</option>
+      <option value='17'>17</option>
+      <option value='18'>18</option>
+      <option value='19'>19</option>
+      <option value='20'>20</option>
 	</select>
     </div>
   </div>
@@ -152,26 +152,26 @@
     <label class="control-label col-sm-2" for="PostiMax">Posti Massimi:</label>
     <div class="col-sm-7">
 <select class="form-control" id="PostiMax" name= "PostiMax" >
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-      <option value="8">8</option>
-      <option value="9">9</option>
-      <option value="10">10</option>
-      <option value="11">11</option>
-      <option value="12">12</option>
-      <option value="13">13</option>
-      <option value="14">14</option>
-      <option value="15">15</option>
-      <option value="16">16</option>
-      <option value="17">17</option>
-      <option value="18">18</option>
-      <option value="19">19</option>
-      <option value="20">20</option>
+      <option value='1'>1</option>
+      <option value='2'>2</option>
+      <option value='3'>3</option>
+      <option value='4'>4</option>
+      <option value='5'>5</option>
+      <option value='6'>6</option>
+      <option value='7'>7</option>
+      <option value='8'>8</option>
+      <option value='9'>9</option>
+      <option value='10'>10</option>
+      <option value='11'>11</option>
+      <option value='12'>12</option>
+      <option value='13'>13</option>
+      <option value='14'>14</option>
+      <option value='15'>15</option>
+      <option value='16'>16</option>
+      <option value='17'>17</option>
+      <option value='18'>18</option>
+      <option value='19'>19</option>
+      <option value='20'>20</option>
 	</select>    </div>
   </div>
   	<br>
@@ -216,10 +216,13 @@
 	
 	
 	jQuery.validator.addMethod("le", function(value, element, param) {
-	    return this.optional(element) || value <= $("select[name="+param+"]").val();
+	    return this.optional(element) || value <= $("select[name="+param+"]").val();	     
 	}, "less");
-	
-	$("#affilia").validate({
+// 	jQuery.validator.addMethod("ge", function(value, element, param) {
+// 	    return this.optional(element) || value >= $("select[name="+param+"]").val();
+// 	}, "greater");  
+	$("#addTavolo").validate({
+		//event: "keyup",
         rules: {
             nome: {
                 required: true,
@@ -227,9 +230,11 @@
             },
             PostiMin: {
                 required: true,
+                le:"PostiMax"
             },
             PostiMax: {
-                required: true,
+                required: true
+               // ge:"PostiMin"
             },
             highlight: function(element) {
                 $(element).closest('.form-group').addClass('has-error');
@@ -246,10 +251,14 @@
                     error.insertAfter(element);
                 }
             }
+        },
+        messages:{
+			PostiMin:{le: "Deve essere minore uguale del numero massimo di posti"},
+			PostiMax:{ge: "Deve essere maggiore uguale del numero minimo di posti"}
         }
     });
 	
-	
+
 
 	</script>		
 
