@@ -4,6 +4,8 @@
 <%@ page import='com.amr.data.User' %>
 <%@ page import='com.amr.db.Connector' %>
 <%@ page import='java.util.ArrayList' %>
+<%@ page import='java.util.List' %>
+
 
 <html>
   <head>
@@ -21,11 +23,16 @@
 	
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<link href="style.css" rel="stylesheet" type="text/css">
+	
+		<link href="bootstrap.min.css" rel="stylesheet" type="text/css">
+			<script src="bootstrap.min.js"></script>
+		
 
   </head>
   <body>
   <jsp:useBean id="utente" scope="session" class="com.amr.data.User"/>
   <%
+
   boolean admin = false;
   String pass = null;
   int id = -1;
@@ -41,6 +48,8 @@
 	  <%
   }
   %>
+  
+
   
   <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-fixed-top">
@@ -140,6 +149,16 @@
   </div>
     
    <br>
+   
+  
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="filtroUt">Filtra per cliente:</label>
+    <div class="col-sm-7">
+<select class="form-control" id="filtroUt" name= "filtroUt" >
+      <option value=""> Nessun Cliente selezionato</option>
+      </select>
+     </div>
+  </div>
     
     <div class="row" >
     <div class="col-md-7 col-md-offset-2">
@@ -201,6 +220,10 @@
 
 
 	<script>
+	
+	
+	
+	
 	<%
 	if(admin){
 		%>
@@ -226,6 +249,7 @@
 	        		$('#fields_div').css('display','inline');
 	        		
 	        		var date = $('#datepicker').val();
+	        		$('#filtroUt').val("")
 	        		
 	        		$.get("/AMR/GetScelteCount?date="+date, function(responseText) {
 	        			if(!responseText == ""){
@@ -277,9 +301,81 @@
 	       cell4.innerHTML = count;
 	       
 	}
-	    
+	    var usList = <%=Connector.getUtentiList()%>;
+	    if(usList.length > 0){
+	    usList.forEach(function(obj) {
 
- 
+	       		$('#filtroUt').append($("<option></option>")
+			         .attr("value",obj.id)
+			         .text(obj.nome + " " + obj.cognome));
+	      		}
+	    );
+	    
+	    $('#filtroUt').change(function(){
+	    	var id = $('#filtroUt').val();
+	    	var date = $('#datepicker').val()
+	    	if($('#filtroUt').val() == ""){
+        		$.get("/AMR/GetScelteCount?date="+date, function(responseText) {
+        			if(!responseText == ""){
+		        			$('#alert-row').css('display','none');
+		        			$("#primitable").children().remove()
+		        			$("#seconditable").children().remove()
+		        			$("#contornitable").children().remove()
+		        			var res = JSON.parse(responseText);
+	 			       		var primi = res.primi
+	 			       		var secondi = res.secondi
+	 			       		var contorni = res.contorni
+	 			       		
+	 			       		primi.forEach(function(entry) {
+	 			       			addRow('primitable', entry.nome, entry.count)
+	 			       		});
+	 			       		
+	 			       		secondi.forEach(function(entry) {
+ 			       			addRow('seconditable', entry.nome, entry.count)
+ 			       		});
+	 			       		
+	 			       		contorni.forEach(function(entry) {
+			       				addRow('contornitable', entry.nome, entry.count)
+			       			});
+	 			       		
+	        			}else{
+        				$('#alert-row').css('display','inline');
+						$('#fields_div').css('display','none');
+	        			}
+        			
+        			
+                });
+	    		
+	    		
+	    	}else{
+	    		
+		    	$.get("/AMR/GetScelteCount?date="+date+"&id="+id, function(res) {
+		    		$("#primitable").children().remove()
+		    		$("#seconditable").children().remove()
+		    		$("#contornitable").children().remove()
+		    		if(res.length > 0){
+		    		console.log(res)
+		    		var entry = JSON.parse(res);
+		    		console.log("entry.length" + entry.length + " entry.primi.length " + entry.primi.length)
+		    		console.log(entry)
+		    		
+			       	addRow('primitable', entry.primi[0].nome, entry.primi[0].count)
+			       	addRow('seconditable', entry.secondi[0].nome, entry.secondi[0].count)      	
+		       		addRow('contornitable', entry.contorni[0].nome, entry.contorni[0].count)
+		    		}
+		    	}
+		    	
+		    	);
+	    		
+	    		
+	    		
+	    	}
+
+
+	    	
+	    });
+
+	    }
 
 	
 

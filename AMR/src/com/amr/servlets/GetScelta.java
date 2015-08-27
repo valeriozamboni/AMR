@@ -29,22 +29,22 @@ public class GetScelta extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int idMenu = Integer.parseInt(request.getParameter("idMenu"));
-		int idCliente = Integer.parseInt(request.getParameter("idCliente"));
-		//System.out.println(idMenu + " " + idCliente);
-		Scelta scelta = Connector.getScelta(idMenu,idCliente);
-	    
-		String res = "";
-	    
-		if(scelta!=null){
-	    	res = scelta.getJson();
-	    }
-	    //System.out.println(res);
-	    response.setContentType("text/plain");  // Set content type of the response so that jQuery knows what it can expect.
-	    response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
-	    response.getWriter().write(res);       // Write response body.
-
 		
+		if(!request.getParameter("idMenu").equals("undefined")){
+			int idMenu = Integer.parseInt(request.getParameter("idMenu"));
+			int idCliente = Integer.parseInt(request.getParameter("idCliente"));
+			Scelta scelta = Connector.getScelta(idMenu,idCliente);
+		    
+			String res = "";
+		    
+			if(scelta!=null){
+		    	res = scelta.getJson();
+		    }
+		    response.setContentType("text/plain");  // Set content type of the response so that jQuery knows what it can expect.
+		    response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
+		    response.getWriter().write(res);       // Write response body.
+
+		}
 	}
 
 	/**

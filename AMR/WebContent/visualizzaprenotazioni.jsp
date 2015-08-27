@@ -4,6 +4,8 @@
 <%@ page import='com.amr.data.User' %>
 <%@ page import='com.amr.db.Connector' %>
 <%@ page import='java.util.ArrayList' %>
+<%@ page import='java.util.List' %>
+
 
 <html>
   <head>
@@ -21,12 +23,14 @@
 	
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<link href="style.css" rel="stylesheet" type="text/css">
-	<link href="bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link href="bootstrap.min.css" rel="stylesheet" type="text/css">
+	
 
   </head>
   <body>
   <jsp:useBean id="utente" scope="session" class="com.amr.data.User"/>
   <%
+
   boolean admin = false;
   String pass = null;
   int id = -1;
@@ -42,6 +46,8 @@
 	  <%
   }
   %>
+  
+
   
   <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-fixed-top">
@@ -70,7 +76,7 @@
 		<li id="gest_menu" class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestisci Menu Affiliati<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Crea Menu</a></li>
+            <li><a href="creamenu.jsp">Crea Menu</a></li>
 			<li><a href="#">Modifica Menu</a></li>
             <li><a href="#">Elimina Menu</a></li>
           </ul>
@@ -85,7 +91,9 @@
           </ul>
         </li>
 					<li id="gest_affilia"><a href="affiliaazienda.jsp">Affilia Azienda</a></li>
-				<li id="vis_scelte"><a href="visualizzascelte.jsp">Visualizza Scelte</a></li>
+					<li id="vis_scelte"><a href="visualizzascelte.jsp">Visualizza Scelte</a></li>
+					
+
 		
 		
 			
@@ -99,7 +107,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%=utente.getEmail()%> <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Visualizza Profilo</a></li>
+            <li><a href="visualizzaprofilo.jsp">Visualizza Profilo</a></li>
             <li><a href="login.jsp">Logout</a></li>
           </ul>
         </li>
@@ -111,31 +119,25 @@
     <br>
     <div class="row">
      <div class="col-md-6 col-md-offset-3">
-     <h1>Seleziona i Piatti</h1>
+     <h1>Visualizza scelte</h1>
      </div></div>
 
-	
+	 <br>
+	  <br>
 	
 	<div class="row" id="alert-row" style="display:none">
     <div class="col-md-7 col-md-offset-3">
     <div class="alert alert-warning" >
-  <strong>Attenzione!</strong> Il menù non è stato ancora inserito per il giorno selezionato.  Riprova in seguito.
+  <strong>Attenzione!</strong> Non è stata ancora effettuata alcuna scelta per il giorno selezionato.  Riprova in seguito.
 </div>
     </div>
     </div>
     
-    	<div class="row" id="alert-row-2" style="display:none">
-    <div class="col-md-7 col-md-offset-3">
-    <div class="alert alert-warning" >
-  <strong>Attenzione!</strong> Le scelte sono già state effettuate per il giorno selezionato. Sarà possibile ora modificarle.
-</div>
-    </div>
-    </div>
     
     
     <div class="row" >
     <div class="col-md-7 col-md-offset-3">
-    <form class="form-horizontal" id="crea_form" name="crea_form" action="AddSceltaGiornaliera"  method="post">
+    <form class="form-horizontal" id="visualizza_form" action="VisualizzaScelte"  method="post">
     
     			  <div class="form-group">
     <label class="control-label col-sm-2" for="date">Giorno:</label>
@@ -144,67 +146,63 @@
     </div>
   </div>
     
+   <br>
+   
+  
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="filtroUt">Filtra per cliente:</label>
+    <div class="col-sm-7">
+<select class="form-control" id="filtroUt" name= "filtroUt" >
+      <option value=""> Nessun Cliente selezionato</option>
+      </select>
+     </div>
+  </div>
     
+    <div class="row" >
+    <div class="col-md-7 col-md-offset-2">
     
     <div id ="fields_div" style="display:none">
     <input style="display:none" type="text" name="fakeusernameremembered"/>
 <input style="display:none" type="password" name="fakepasswordremembered"/>
     
-    
-    
-			  <div class="form-group">
-    <label class="control-label col-sm-2" for="selprimo">seleziona primo:</label>
-    <div class="col-sm-7">
-<select class="form-control" id="selprimo" name= "selprimo" >
-      <option disabled selected value=""> -- seleziona un primo --</option>
-      </select>
-     </div>
-  </div>
-  
-    
-  
-  <br>
-  <br>
-  
-  
-  
-    <div class="form-group">
-    <label class="control-label col-sm-2" for="selsecondo">seleziona secondo:</label>
-    <div class="col-sm-7"> 
-	<select class="form-control" id="selsecondo" name= "selsecondo" >
-	<option disabled selected value= ""> -- seleziona un secondo --
-      </option>
-	</select>
-    </div>
-  </div>
-  
-    
-  
-   <br>
-  <br>
-  
-        <div class="form-group">
-    <label class="control-label col-sm-2" for="selcontorno">selziona contorno:</label>
-    <div class="col-sm-7"> 
-      <select class="form-control" id="selcontorno" name= "selcontorno" >
-      <option disabled selected value=""> -- seleziona un contorno --
-      </option>
-	</select>
-    </div>
-  </div>
+    <h2>Primi</h2>
+  <table class="table table-striped" id="primitable">
+    <thead>
+      <tr>
+        <th>Nome Piatto</th>
+        <th>Quantità</th>
+      </tr>
+    </thead>
+  </table>
+  <h2>Secondi</h2>
+    <table class="table table-striped" id="seconditable">
+    <thead>
+      <tr>
+        <th>Nome Piatto</th>
+        <th>Quantità</th>
+      </tr>
+    </thead>
+  </table>
+  <h2>Contorni</h2>
+    <table class="table table-striped" id="contornitable">
+    <thead>
+      <tr>
+        <th>Nome Piatto</th>
+        <th>Quantità</th>
+      </tr>
+    </thead>
+  </table>
+</div> 
+
+		</div></div>	  
      
- <input style="display:none" type="text" name="userid" value="<%=id %>"/>
+
   <input style="display:none" type="text" id="menuid" name="menuid"/>
   
   <br>
-
-  <div class="form-group"> 
-    <div class="col-md-7 col-md-offset-2">
-      <button type="submit" class="btn btn-lg btn-primary btn-block">SALVA</button>
-    </div>
-  </div>
-  </div>
-  </form>
+</form>
+  
+  
   <div class="row">
      <div class="col-md-7 col-md-offset-2">
      <form action="home.jsp">
@@ -215,11 +213,15 @@
     
     
     </div>
-    </div>
- 
+    
+ </div>
 
 
 	<script>
+	
+	
+	
+	
 	<%
 	if(admin){
 		%>
@@ -237,114 +239,141 @@
 	
 	%>
 	
-	jQuery.validator.addMethod("notEqual", function(value, element, param) {
-		  return this.optional(element) || value != param;
-		}, "Please specify a different (non-default) value");
 	
-	    $("#crea_form").validate({
-	        rules: {
-	        	selprimo: {
-	                required:true    
-	            },
-	            selsecondo: {
-	            	required:true
-	            },
-	            selcontorno: {
-	            	required:true
-	            },
-
-	            errorElement: 'span',
-	            errorClass: 'help-block',
-	            errorPlacement: function(error, element) {
-	                if(element.parent('.input-group').length) {
-	                    error.insertAfter(element.parent());
-	                } else {
-	                    error.insertAfter(element);
-	                }
-	            }
-	        }
-	    });
 
 	    $(function() {
 	        $( "#datepicker" ).datepicker();
 	        $('#datepicker').change(function() {
 	        		$('#fields_div').css('display','inline');
-	        		$("#selprimo").empty();
-	        		$('#selprimo').append($("<option disabled selected></option>")
-	        				.attr("value","")
-       			         .text("-- seleziona un primo --"));
-	        		$("#selsecondo").empty();
-	        		$('#selsecondo').append($("<option disabled selected></option>")
-	        			 .attr("value","")
-       			         .text("-- seleziona un secondo --"));
-	        		$("#selcontorno").empty();
-	        		$('#selcontorno').append($("<option disabled selected></option>")
-	        			 .attr("value","")
-       			         .text("-- seleziona un contorno --"));
-	        		var date = $('#datepicker').val();
 	        		
-	        		$.get("/AMR/GetMenu?date="+date, function(responseText) {
+	        		var date = $('#datepicker').val();
+	        		$('#filtroUt').val("")
+	        		
+	        		$.get("/AMR/GetScelteCount?date="+date, function(responseText) {
 	        			if(!responseText == ""){
-		        			$('#alert-row').css('display','none');
-		        			
-		        			var res = JSON.parse(responseText);
-	 			       		var id = res.id
-	 			       		
-	 			       		
-	 			       		var primi = res.primi
-	 			       		var secondi = res.secondi
-	 			       		var contorni = res.contorni
-	 			       		$('#menuid').val(id)
-	 			       		primi.forEach(function(entry) {
-	 			       		$('#selprimo').append($("<option></option>")
-		        			         .attr("value",entry.id)
-		        			         .text(entry.nome));
-	 			      		});
-	 			       		secondi.forEach(function(entry) {
-	 			       		$('#selsecondo').append($("<option></option>")
-		        			         .attr("value",entry.id)
-		        			         .text(entry.nome));
-	 			      		});
-	 			       		contorni.forEach(function(entry) {
-	 			       		$('#selcontorno').append($("<option></option>")
-		        			         .attr("value",entry.id)
-		        			         .text(entry.nome));
-	 			      		});
-		        			
-		        			
-	        			}else{
+ 		        			$('#alert-row').css('display','none');
+ 		        			$("#primitable").children().remove()
+ 		        			$("#seconditable").children().remove()
+ 		        			$("#contornitable").children().remove()
+ 		        			var res = JSON.parse(responseText);
+ 	 			       		var primi = res.primi
+ 	 			       		var secondi = res.secondi
+ 	 			       		var contorni = res.contorni
+ 	 			       		
+ 	 			       		primi.forEach(function(entry) {
+ 	 			       			addRow('primitable', entry.nome, entry.count)
+ 	 			       		});
+ 	 			       		
+ 	 			       		secondi.forEach(function(entry) {
+	 			       			addRow('seconditable', entry.nome, entry.count)
+	 			       		});
+ 	 			       		
+ 	 			       		contorni.forEach(function(entry) {
+ 			       				addRow('contornitable', entry.nome, entry.count)
+ 			       			});
+ 	 			       		
+ 	        			}else{
 	        				$('#alert-row').css('display','inline');
 							$('#fields_div').css('display','none');
-							$('#alert-row-2').css('display','none');
-	        			}
-	        			
-	        			
-		        		$.get("/AMR/GetScelta?idMenu="+id+"&idCliente="+<%=id %>, function(responseText) {
-		        			if(!responseText == ""){
-		        				$('#alert-row-2').css('display','inline');
-			        			var scelta = JSON.parse(responseText);
-			        			var primo = scelta.primo.id
-			        			var secondo = scelta.secondo.id
-			        			var contorno = scelta.contorno.id
-			        			$('#selprimo').val(primo);
-			        			$('#selsecondo').val(secondo);
-			        			$('#selcontorno').val(contorno);
-		        			}else{
-		        				$('#alert-row-2').css('display','none');
-		        			}
-		                });
+ 	        			}
 	        			
 	        			
 	                });
 	        		
-
-	        		
 	        	});
 	      });
 	    
-	
+	    
 
- 
+	    
+	    function addRow(tableId, nome, count) {
+
+	        var table = document.getElementById(tableId);
+
+	        var rowCount = table.rows.length;
+	        var row = table.insertRow(rowCount);
+
+	        var cell3 = row.insertCell(0);
+	       cell3.innerHTML = nome;
+	       var cell4 = row.insertCell(1);
+	       cell4.innerHTML = count;
+	       
+	}
+	    var usList = <%=Connector.getUtentiList()%>;
+	    if(usList.length > 0){
+	    usList.forEach(function(obj) {
+
+	       		$('#filtroUt').append($("<option></option>")
+			         .attr("value",obj.id)
+			         .text(obj.nome + " " + obj.cognome));
+	      		}
+	    );
+	    
+	    $('#filtroUt').change(function(){
+	    	var id = $('#filtroUt').val();
+	    	var date = $('#datepicker').val()
+	    	if($('#filtroUt').val() == ""){
+        		$.get("/AMR/GetScelteCount?date="+date, function(responseText) {
+        			if(!responseText == ""){
+		        			$('#alert-row').css('display','none');
+		        			$("#primitable").children().remove()
+		        			$("#seconditable").children().remove()
+		        			$("#contornitable").children().remove()
+		        			var res = JSON.parse(responseText);
+	 			       		var primi = res.primi
+	 			       		var secondi = res.secondi
+	 			       		var contorni = res.contorni
+	 			       		
+	 			       		primi.forEach(function(entry) {
+	 			       			addRow('primitable', entry.nome, entry.count)
+	 			       		});
+	 			       		
+	 			       		secondi.forEach(function(entry) {
+ 			       			addRow('seconditable', entry.nome, entry.count)
+ 			       		});
+	 			       		
+	 			       		contorni.forEach(function(entry) {
+			       				addRow('contornitable', entry.nome, entry.count)
+			       			});
+	 			       		
+	        			}else{
+        				$('#alert-row').css('display','inline');
+						$('#fields_div').css('display','none');
+	        			}
+        			
+        			
+                });
+	    		
+	    		
+	    	}else{
+	    		
+		    	$.get("/AMR/GetScelteCount?date="+date+"&id="+id, function(res) {
+		    		$("#primitable").children().remove()
+		    		$("#seconditable").children().remove()
+		    		$("#contornitable").children().remove()
+		    		if(res.length > 0){
+		    		console.log(res)
+		    		var entry = JSON.parse(res);
+		    		console.log("entry.length" + entry.length + " entry.primi.length " + entry.primi.length)
+		    		console.log(entry)
+		    		
+			       	addRow('primitable', entry.primi[0].nome, entry.primi[0].count)
+			       	addRow('seconditable', entry.secondi[0].nome, entry.secondi[0].count)      	
+		       		addRow('contornitable', entry.contorni[0].nome, entry.contorni[0].count)
+		    		}
+		    	}
+		    	
+		    	);
+	    		
+	    		
+	    		
+	    	}
+
+
+	    	
+	    });
+
+	    }
 
 	
 

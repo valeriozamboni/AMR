@@ -21,6 +21,7 @@
 	
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<link href="style.css" rel="stylesheet" type="text/css">
+	<link href="bootstrap.min.css" rel="stylesheet" type="text/css">
 
   </head>
   <body>
@@ -289,15 +290,10 @@
 	            contorno_2: {
 	            	minlength: 2
 	            },
-	            contorno_2: {
+	            contorno_3: {
 	            	minlength: 2
 	            },
-	            contorno_2: function(element) {
-	                $(element).closest('.form-group').addClass('has-error');
-	            },
-	            contorno_3: function(element) {
-	                $(element).closest('.form-group').removeClass('has-error');
-	            },
+	           
 	            errorElement: 'span',
 	            errorClass: 'help-block',
 	            errorPlacement: function(error, element) {

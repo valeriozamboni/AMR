@@ -40,7 +40,7 @@ public class AddMenu extends HttpServlet {
 	    String contorno_1 = request.getParameter("contorno_1");
 	    String contorno_2 = request.getParameter("contorno_2");
 	    String contorno_3 = request.getParameter("contorno_3");
-	    
+	    //System.out.println(date + " " + primo_1 + " " + primo_2 + " " + primo_3 + " " + sec_1 + " " + sec_2 + " " + sec_3 + " "+ contorno_1 + " " + contorno_2 + " " + contorno_3);
 	    Connector.addMenu(date, primo_1, primo_2, primo_3, sec_1, sec_2, sec_3, contorno_1, contorno_2, contorno_3);
 	    RequestDispatcher view = request.getRequestDispatcher("result.jsp");
 	    request.setAttribute("message", "Menu inserito con successo!");

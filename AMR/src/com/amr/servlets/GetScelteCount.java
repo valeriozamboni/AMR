@@ -30,14 +30,24 @@ public class GetScelteCount extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-
-			CountScelte scelte = Connector.getCountPrimi(request.getParameter("date"));
-	    
+			
+			String data = request.getParameter("date");
+			String id = request.getParameter("id");
+			CountScelte scelte = null;
+			if(id!=null && !id.equals("")){
+				scelte = Connector.getCountByUser(data, Integer.parseInt(id));
+			}else{
+				scelte = Connector.getCountPiatti(data);
+			}
+			
+			 
 			String res = "";
 		    
-			if(scelte.isNotEmpty()){
+			if(scelte.isNotEmpty() && scelte != null){
 		    	res = scelte.getJson();
 		    }
+			
+			
 			//System.out.println(res);
 		    response.setContentType("text/plain");  // Set content type of the response so that jQuery knows what it can expect.
 		    response.setCharacterEncoding("UTF-8"); // You want world domination, huh?

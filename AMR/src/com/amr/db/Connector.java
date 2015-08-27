@@ -13,6 +13,7 @@ import com.amr.data.CountScelte;
 import com.amr.data.Menu;
 import com.amr.data.Piatto;
 import com.amr.data.Scelta;
+import com.amr.data.Tavolo;
 import com.amr.data.User;
 
 public class Connector {
@@ -92,6 +93,88 @@ public class Connector {
 		
 		return aziende;
 	}
+	
+	
+	
+	public static String getUtentiList(){
+		Connection conn = getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
+		String sqlQuery = "select * from amr.cliente;";
+		ArrayList<String> users = new ArrayList<String>();
+		try {
+			stmt = conn.createStatement();
+		    rs = stmt.executeQuery(sqlQuery);
+		    while(rs.next()){
+		    	users.add(new User(
+		    			rs.getInt("ClienteID"),
+		    			rs.getString("Nome"),
+		    			rs.getString("Cognome"),
+		    			rs.getString("CF"),
+		    			rs.getString("Residenza"),
+		    			rs.getString("email"),
+		    			rs.getString("password"),
+		    			rs.getBoolean("admin"),
+		    			rs.getBoolean("Affiliato")
+		    			).getJson()) ;
+		    }
+		     
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return toJavascriptArray2(users);
+	}
+	
+	public static List<Tavolo> getTavoliFromGiorno(String giorno, int fascia){
+		Connection conn = getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
+		String sqlQuery = "select * from amr.tavolo where ID_tavolo not in (select ID_tavolo from amr.prenotazione " +
+						"where giorno = '"+ giorno + "' and prenotazione.fascia = " + fascia+");";
+		List<Tavolo> tavoli = new ArrayList<Tavolo>();
+		try {
+			stmt = conn.createStatement();
+		    rs = stmt.executeQuery(sqlQuery);
+		    while(rs.next()){
+		    	tavoli.add(new Tavolo(
+		    			rs.getInt("ID_tavolo"),
+		    			rs.getString("nome"),
+		    			rs.getInt("postiMin"),
+		    			rs.getInt("postiMax")
+		    			)) ;
+		    }
+		     
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return tavoli;
+	}
+	
+	public static Tavolo getTavoloFromId(int idtavolo){
+		Connection conn = getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
+		String sqlQuery = "select * from amr.tavolo where ID_tavolo = "+ idtavolo + ");";
+		Tavolo tavolo = null;
+		try {
+			stmt = conn.createStatement();
+		    rs = stmt.executeQuery(sqlQuery);
+		    while(rs.next()){
+		    	tavolo=new Tavolo(
+		    			rs.getInt("ID_tavolo"),
+		    			rs.getString("nome"),
+		    			rs.getInt("postiMin"),
+		    			rs.getInt("postiMax")
+		    			) ;
+		    }
+		     
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return tavolo;
+	}
+	
 	
 	public static User registerUser(String email, String pass, String nome, String cognome, String cf, String res, int affiliato, int idAzienda){
 		Connection conn = getConnection();
@@ -411,6 +494,19 @@ public class Connector {
 	    sb.append("]");
 	    return sb.toString();
 	}
+	
+	public static String toJavascriptArray2(ArrayList<String> arr){
+	    StringBuffer sb = new StringBuffer();
+	    sb.append("[");
+	    for(int i=0; i<arr.size(); i++){
+	        sb.append("").append(arr.get(i)).append("");
+	        if(i+1 < arr.size()){
+	            sb.append(",");
+	        }
+	    }
+	    sb.append("]");
+	    return sb.toString();
+	}
 
 	public static void addScelta(int id_utente, int id_menu, int id_primo, int id_secondo, int id_contorno) {
 		Connection conn = getConnection();
@@ -444,7 +540,7 @@ public class Connector {
 		
 	}
 	
-	public static CountScelte getCountPrimi(String giorno){
+	public static CountScelte getCountPiatti(String giorno){
 		Connection conn = getConnection();
 		Statement stmt = null;
 		ResultSet rsp = null;
@@ -490,6 +586,56 @@ public class Connector {
 	}
 	
 	
+	public static CountScelte getCountByUser(String giorno, int id){
+		Connection conn = getConnection();
+		Statement stmt = null;
+		ResultSet rsp = null;
+		ResultSet rss = null;
+		ResultSet rsc = null;
+
+		String sqlPrimi = "select count(*) as n, primo.nome as nome from amr.menu inner join amr.sceltagiornaliera"
+				+ " inner join amr.primo where menu.giorno = '" + giorno + "' and " +
+				"menu.ID_menu = sceltagiornaliera.ID_menu and " +
+				"sceltagiornaliera.ID_primo = primo.ID_primo and " +
+				"sceltagiornaliera.ID_cliente = " + id + " " +
+				"group by primo.ID_primo";
+		String sqlSecondi = "select count(*) as n, secondo.nome as nome from amr.menu inner join amr.sceltagiornaliera"
+				+ " inner join amr.secondo where menu.giorno = '" + giorno + "' and " +
+				"menu.ID_menu = sceltagiornaliera.ID_menu and " +
+				"sceltagiornaliera.ID_secondo = secondo.ID_secondo and " +
+				"sceltagiornaliera.ID_cliente = " + id + " " +
+				"group by secondo.ID_secondo";
+		String sqlContorni = "select count(*) as n, contorno.nome as nome from amr.menu inner join amr.sceltagiornaliera"
+				+ " inner join amr.contorno where menu.giorno = '" + giorno + "' and " +
+				"menu.ID_menu = sceltagiornaliera.ID_menu and " +
+				"sceltagiornaliera.ID_contorno = contorno.ID_contorno and " +
+				"sceltagiornaliera.ID_cliente = " + id + " " +
+				"group by contorno.ID_contorno";
+		CountScelte scelte = new CountScelte();
+		try {	
+			stmt = conn.createStatement();
+			rsp = stmt.executeQuery(sqlPrimi);  
+			while(rsp.next()){
+				scelte.addPrimo(rsp.getString("nome"), rsp.getInt("n"));
+			}
+			stmt = conn.createStatement();
+			rss = stmt.executeQuery(sqlSecondi);  
+			while(rss.next()){
+				scelte.addSecondo(rss.getString("nome"), rss.getInt("n"));
+			}
+			stmt = conn.createStatement();
+			rsc = stmt.executeQuery(sqlContorni); 
+			while(rsc.next()){
+				scelte.addContorno(rsc.getString("nome"), rsc.getInt("n"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return scelte;
+	}
+	
+	
+	
 	public static void addTavolo(String nome, int postiMin, int postiMax){
 		Connection conn = getConnection();
 		Statement stmt = null;	
@@ -506,5 +652,27 @@ public class Connector {
 			e.printStackTrace();
 		}
 
+	}
+
+	public static void prenotaTavolo(int idCli, int idTav, String fascia, String orario, String data, int num) {
+		Connection conn = getConnection();
+		Statement stmt = null;	
+		String sqlQuery = "insert into amr.prenotazione (ID_cliente, ID_tavolo, giorno, fascia, orario, numeropers) values ("+
+					"" + idCli +
+					", " + idTav +
+					", '" + data +
+					"', " + fascia +
+					", '" + orario +
+					"', " + num +
+					")";
+
+		try {
+			stmt = conn.createStatement();
+			stmt.execute(sqlQuery);   
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 }

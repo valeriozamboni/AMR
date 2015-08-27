@@ -11,24 +11,9 @@ public class User {
 	private String pass;
 	private boolean admin;
 	private boolean affiliato;
-	
-	private boolean logged;
-	 
-	
+
 	public User(){
-		   
-	} 
-	
-	public User(String nome, String cognome, String cf, String residenza, String email, String pass, boolean admin, boolean affiliato) {
-		super();
-		this.nome = nome;
-		this.cognome = cognome;
-		this.cf = cf;
-		this.residenza = residenza;
-		this.email = email;
-		this.pass = pass;
-		this.admin = admin;
-		this.logged = true;
+		
 	}
 	
 	public User(int id, String nome, String cognome, String cf, String residenza, String email, String pass, boolean admin, boolean affiliato) {
@@ -41,8 +26,24 @@ public class User {
 		this.email = email;
 		this.pass = pass;
 		this.admin = admin;
-		this.logged = true;
+		this.affiliato = affiliato;
 	}
+	
+	public String getJson(){
+
+		return "{ " +
+				"\"id\" : " + this.id + ", " + 
+				"\"nome\": \"" + this.nome + "\", " +
+				"\"cognome\": \"" + this.cognome + "\", " +
+				"\"cf\": \"" + this.cf + "\", " +
+				"\"residenza\": \"" + this.residenza + "\", " +
+				"\"email\": \"" + this.email + "\", " +
+				"\"pass\": \"" + this.pass + "\", " + 
+				"\"admin\": " + this.admin + ", " +
+				"\"aff\": " + this.affiliato + " " +
+				"}";
+	}
+	
 
 	public String getNome() {
 		return nome;
@@ -106,14 +107,6 @@ public class User {
 
 	public void setAffiliato(boolean affiliato) {
 		this.affiliato = affiliato;
-	}
-
-	public boolean isLogged() {
-		return logged;
-	}
-
-	public void setLogged(boolean logged) {
-		this.logged = logged;
 	}
 
 	public int getId() {
