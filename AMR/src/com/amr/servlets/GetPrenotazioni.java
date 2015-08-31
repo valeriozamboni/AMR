@@ -1,6 +1,7 @@
 package com.amr.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -9,58 +10,65 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.amr.data.Prenotazione;
 import com.amr.data.Tavolo;
 import com.amr.db.Connector;
 
 /**
- * Servlet implementation class getTavoli
+ * Servlet implementation class GetPrenotazioni
  */
-@WebServlet("/getTavoli")
-public class getTavoli extends HttpServlet {
+@WebServlet("/GetPrenotazioni")
+public class GetPrenotazioni extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public getTavoli() {
+    public GetPrenotazioni() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String giorno = request.getParameter("giorno");
-		int fascia = Integer.parseInt(request.getParameter("fascia"));
-
-		List<Tavolo> tavoli = Connector.getTavoliFromGiorno(giorno,fascia);
-		if(tavoli.size()>0){
-			String jsonString = createJson(tavoli);
-			response.setContentType("text/plain"); 
-		    response.setCharacterEncoding("UTF-8");
-		    response.getWriter().write(jsonString); 
+		
+		String data = request.getParameter("date");
+		String fascia = request.getParameter("fascia");
+		List<Prenotazione> pren = null;
+		
+		if(fascia!=null && !fascia.equals("")){
+			pren = Connector.getPrenotazioniFromGiornoAndFascia(data, Integer.parseInt(fascia));
 		}else{
-			
+			pren = Connector.getPrenotazioniFromGiorno(data);
 		}
+		
 		 
+		String res = "";
+	    
+		if(!pren.isEmpty() && pren != null){
+	    	res = "{ \"prenotazioni\" : [ ";
+	    	for(Prenotazione p: pren){
+	    		res = res + p.getJson() + ", ";
+	    	}
+	    	res = res.substring(0, res.length() -2) + "]}";
+	    }
+		
+		
+		//System.out.println(res);
+	    response.setContentType("text/plain");  
+	    response.setCharacterEncoding("UTF-8"); 
+	    response.getWriter().write(res); 
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 	
-	private String createJson(List<Tavolo> tavoli){
-		String json = "{ \"tavoli\" : [ ";
-		for(Tavolo t: tavoli){
-			json = json + t.getJson() + ", ";
-		}
-		
-		return json.substring(0, json.length() - 2) + "]}";
-	}
+	
+	
 
 }

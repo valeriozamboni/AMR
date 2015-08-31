@@ -21,28 +21,20 @@
 	
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<link href="style.css" rel="stylesheet" type="text/css">
-	
-	<script type="text/javascript" src="bootstrap-multiselect.js"></script>
-	<link rel="stylesheet" href="bootstrap-multiselect.css" type="text/css"/>
-	
-	<link href="multiple-select.css" rel="stylesheet"/>
-	<script src="jquery.multiple.select.js"></script>
-		<link href="bootstrap.min.css" rel="stylesheet" type="text/css">
+		
+	<link href="bootstrap-datetimepicker.min.css" rel="stylesheet"/>
+	<script src="bootstrap-datetimepicker.min.js"></script>
 	
 
   </head>
   <body>
   <jsp:useBean id="utente" scope="session" class="com.amr.data.User"/>
   <%
-  boolean admin = false;
-  String pass = null;
-  int id = -1;
-
+  boolean admin = true;
+  boolean affiliato = true;
   if(utente.getEmail() != null){
 	  admin = utente.isAdmin();
-	  pass = utente.getPass();
-	  id = utente.getId();
-
+	  affiliato = utente.isAffiliato();
   }else{
 	  %>
 	  <jsp:forward page="login.jsp" />
@@ -64,39 +56,49 @@
     </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-			<li id="sel_menu"><a href="#">Seleziona Menu</a></li>
+			
 		
-		<li id="prenotazioni" class="dropdown">
+		<li id="prenotazioni-usr" class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prenotazioni <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Prenota Tavolo</a></li>
-            <li><a href="#">Elimina Prenotazione</a></li>
+            <li><a href="PrenotaTavolo.jsp">Prenota Tavolo</a></li>
+            <li><a href="#">Le mie prenotazioni</a></li>
           </ul>
         </li>
 		
-		<li id="gest_menu" class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestisci Menu Affiliati<span class="caret"></span></a>
+		<li id="menu-aff" class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Menu Affiliati<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Crea Menu</a></li>
-			<li><a href="#">Modifica Menu</a></li>
-            <li><a href="#">Elimina Menu</a></li>
+            <li id="gest_creamenù"><a href="selezionamenu.jsp">Seleziona Menu</a></li>
+			<li><a href="#">I miei Menu</a></li>
           </ul>
         </li>
 		
-		<li id="gest_tavoli" class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestisci Tavoli<span class="caret"></span></a>
+		<li id="gest-tavoli" class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestione Tavoli<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Crea Tavolo</a></li>
-			<li><a href="#">Modifica Tavolo</a></li>
-            <li><a href="#">Elimina Tavolo</a></li>
+            <li><a href="aggiungitavolo.jsp">Crea Tavolo</a></li>
+			<li><a href="#">I miei tavoli</a></li>
           </ul>
         </li>
-					<li id="gest_affilia"><a href="affiliaazienda.jsp">Affilia Azienda</a></li>
-				<li id="vis_scelte"><a href="visualizzascelte.jsp">Visualizza Scelte</a></li>
-				<li id="pre_tavolo"><a href="visualizzascelte.jsp">Visualizza Scelte</a></li>
-		
-		
-			
+        <li id="prenotazioni-admin" class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestione Prenotazioni<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="visualizzaprenotazioni.jsp">Visualizza Prenotazioni</a></li>
+			<li><a href="PrenotaTavolo.jsp">Inserisci Prenotazione</a></li>
+          </ul>
+        </li>
+        <li id="menu-admin" class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestione Menu<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="creamenu.jsp">Inserisci Menu</a></li>
+			<li><a href="visualizzascelte.jsp">Visualizza Scelte</a></li>
+			<li><a href="#">I miei menu</a></li>
+          </ul>
+        </li>
+        
+		<li id="affilia"><a href="affiliaazienda.jsp">Affilia Azienda</a></li>
+
           </ul>
 		  
 	
@@ -107,7 +109,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%=utente.getEmail()%> <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Prenota Tavolo</a></li>
+            <li><a href="visualizzaprofilo.jsp">Visualizza Profilo</a></li>
             <li><a href="login.jsp">Logout</a></li>
           </ul>
         </li>
@@ -168,54 +170,30 @@
 <input style="display:none" type="password" name="fakepasswordremembered"/>
     
     <div class="form-group">
-    <label class="control-label col-sm-2" for="Tavoli">Tavoli:</label>
+    <label class="control-label col-sm-2" for="Tavoli">Seleziona un tavolo:</label>
     <div class="col-sm-7">
-<select  multiple="multiple" id="Tavoli" name= "Tavoli[]" >
-      
+<select class="form-control" id="Tavoli" name= "Tavoli" >
+     
       
 	</select>
     </div>
   </div>
   
+  
+       <div class="form-group">
+    <label class="control-label col-sm-2" for="ora">Orario Indicativo:</label>
+    <div class="col-sm-7">
+<select class="form-control" id="ora" name= "ora" >
+
+      
+	</select>
+    </div>
+  </div>
     
-			  <div class="form-group">
-    <label class="control-label col-sm-2" for="Fascia">Orario Indicativo:</label>
-    <div class="col-sm-7">
-    <input type="text" name="orario" id= "orario" class="form-control" placeholder="Inserisci un orario indicativo" >
-    </div>
-  </div>
-  
-    <div class="form-group">
-    <label class="control-label col-sm-2" for="persone">Numero di Persone:</label>
-    <div class="col-sm-7">
-<select  class="form-control" id="persone" name= "persone" >
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-      <option value="8">8</option>
-      <option value="9">9</option>
-      <option value="10">10</option>
-      <option value="11">11</option>
-      <option value="12">12</option>
-      <option value="13">13</option>
-      <option value="14">14</option>
-      <option value="15">15</option>
-      <option value="16">16</option>
-      <option value="17">17</option>
-      <option value="18">18</option>
-      <option value="19">19</option>
-      <option value="20">20</option> 
-	</select>
-    </div>
-  </div>
   
 
      
- <input style="display:none" type="text" name="userid" value="<%=id %>"/>
+ <input style="display:none" type="text" name="userid" value="<%=utente.getId() %>"/>
   
   <br>
 
@@ -243,25 +221,34 @@
 	<script>
 	
 // 	 $('#Tavoli').multipleSelect();
-	$('#Tavoli').multiselect({
-        includeSelectAllOption: true,
-        enableFiltering: true
-    });
-	<%
+// 	$('#Tavoli').multiselect({
+//         includeSelectAllOption: true,
+//         enableFiltering: true
+//     });
+		<%
 	if(admin){
+		//Admin hides: prenotazioni-usr, menu-aff
 		%>
 		
-		$("#sel_menu").css('display','none');
-		$("#prenotazioni").css('display','none');
+		$("#menu-aff").css('display','none');
+		$("#prenotazioni-usr").css('display','none');
 	<%
 	}else{
+		
+		//User hides: gest-tavoli, prenotazioni-admin, affilia, menu-admin
 		%>
-		$("#gest_menu").css('display','none');
-		$("#gest_tavoli").css('display','none');
-		$("#gest_affilia").css('display','none');
-	<%
+		
+		$("#gest-tavoli").css('display','none');
+		$("#prenotazioni-admin").css('display','none');
+		$("#affilia").css('display','none');
+		$("#menu-admin").css('display','none');
+		<%
+		if(!affiliato){
+		%>
+			$("#menu-aff").css('display','none');
+		<%
+		}	
 	}
-	
 	%>
 	
 	jQuery.validator.addMethod("notEqual", function(value, element, param) {
@@ -301,6 +288,7 @@
 	        		$.get("/AMR/getTavoli?giorno="+date+"&fascia="+fascia, function(responseText) {
 	        			if(!responseText == ""){
 		        			$('#alert-row').css('display','none');
+		        			console.log(responseText);
 		        			
 		        			var res = JSON.parse(responseText);
 	 			       		var tavoli = res.tavoli
@@ -308,29 +296,8 @@
 	 			       			$("#Tavoli").append($("<option></option>")
 	 			       				.attr("value",entry.id)
 	 			       				.text(entry.nome + "[" + entry.min + "-"+ entry.max + "]"));
-	 			       		});
-	 			       		$("#Tavoli").multiselect('rebuild')
-	 			       		
-// 	 			       		var primi = res.primi
-// 	 			       		var secondi = res.secondi
-// 	 			       		var contorni = res.contorni
-// 	 			       		$('#menuid').val(id)
-// 	 			       		primi.forEach(function(entry) {
-// 	 			       		$('#selprimo').append($("<option></option>")
-// 		        			         .attr("value",entry.id)
-// 		        			         .text(entry.nome));
-// 	 			      		});
-// 	 			       		secondi.forEach(function(entry) {
-// 	 			       		$('#selsecondo').append($("<option></option>")
-// 		        			         .attr("value",entry.id)
-// 		        			         .text(entry.nome));
-// 	 			      		});
-// 	 			       		contorni.forEach(function(entry) {
-// 	 			       		$('#selcontorno').append($("<option></option>")
-// 		        			         .attr("value",entry.id)
-// 		        			         .text(entry.nome));
-// 	 			      		});
-		        			
+	 			       		}); 			       		
+
 		        			
 	        			}else{
 	        				$('#alert-row').css('display','inline');
@@ -348,10 +315,80 @@
 	        		
 	        	});
 	      });
-	   
-
- 
-
+	    $('#fascia').change(function() {
+	    	if($('#fascia').val() == "1"){
+	    		
+	    		$("#ora").empty();
+	    		
+	    		$("#ora").append($("<option></option>")
+		       				.attr("value","11:00")
+		       				.text("11:00"));
+	    		$("#ora").append($("<option></option>")
+	       				.attr("value","11:30")
+	       				.text("11:30"));
+	    		$("#ora").append($("<option></option>")
+	       				.attr("value","12:00")
+	       				.text("12:00"));
+	    		$("#ora").append($("<option></option>")
+	       				.attr("value","12:30")
+	       				.text("12:30"));
+	    		$("#ora").append($("<option></option>")
+	       				.attr("value","13:00")
+	       				.text("13:00"));
+	    		$("#ora").append($("<option></option>")
+	       				.attr("value","13:30")
+	       				.text("13:30"));
+	    		$("#ora").append($("<option></option>")
+	       				.attr("value","14:00")
+	       				.text("14:00"));
+	    		$("#ora").append($("<option></option>")
+	       				.attr("value","14:30")
+	       				.text("14:30"));
+		       		
+	    	}else{
+	    		
+	    		$("#ora").empty();
+	    		
+	    	$("#ora").append($("<option></option>")
+	       				.attr("value","18:00")
+	       				.text("18:00"));
+    		$("#ora").append($("<option></option>")
+       				.attr("value","18:30")
+       				.text("18:30"));
+    		$("#ora").append($("<option></option>")
+       				.attr("value","19:00")
+       				.text("19:00"));
+    		$("#ora").append($("<option></option>")
+       				.attr("value","19:30")
+       				.text("19:30"));
+    		$("#ora").append($("<option></option>")
+       				.attr("value","20:00")
+       				.text("20:00"));
+    		$("#ora").append($("<option></option>")
+       				.attr("value","20:30")
+       				.text("20:30"));
+    		$("#ora").append($("<option></option>")
+       				.attr("value","21:00")
+       				.text("21:00"));
+    		$("#ora").append($("<option></option>")
+       				.attr("value","21:30")
+       				.text("21:30"));
+    		$("#ora").append($("<option></option>")
+       				.attr("value","22:00")
+       				.text("22:00"));
+    		$("#ora").append($("<option></option>")
+       				.attr("value","22:30")
+       				.text("22:30"));
+    		$("#ora").append($("<option></option>")
+       				.attr("value","23:00")
+       				.text("23:00"));
+    		$("#ora").append($("<option></option>")
+       				.attr("value","23:30")
+       				.text("23:30"));
+	    		
+	    	}
+	    });
+	    $("#fascia").trigger('change');
 	
 
 	</script>		

@@ -12,7 +12,6 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<link href="style.css" rel="stylesheet" type="text/css">
-	<link href="bootstrap.min.css" rel="stylesheet" type="text/css">
 
   </head>
   <body>
@@ -21,6 +20,7 @@
   <%
   User user = (User)request.getAttribute("user");
   if(user != null){
+	  
 	  utente.setNome(user.getNome());
 	  utente.setCognome(user.getCognome());
 	  utente.setCf(user.getCf());
@@ -32,14 +32,18 @@
 	  utente.setId(user.getId());
   }
   
-
-  if(utente.getEmail() == null){
+  boolean admin = true;
+  boolean affiliato = true;
+  if(utente.getEmail() != null){
+	  admin = utente.isAdmin();
+	  affiliato = utente.isAffiliato();
+	 
+  }else{
 	  %>
  	  <jsp:forward page="login.jsp" /> 
 	  <%
   }
-  boolean admin = true;
-  boolean affiliato = true;
+  
   
   %>
   
@@ -139,19 +143,21 @@
 		$("#prenotazioni-usr").css('display','none');
 	<%
 	}else{
+		
 		//User hides: gest-tavoli, prenotazioni-admin, affilia, menu-admin
 		%>
-		$("#gest_tavoli").css('display','none');
+		
+		$("#gest-tavoli").css('display','none');
 		$("#prenotazioni-admin").css('display','none');
 		$("#affilia").css('display','none');
 		$("#menu-admin").css('display','none');
-		
+		<%
 		if(!affiliato){
+		%>
 			$("#menu-aff").css('display','none');
-		}
-	<%
+		<%
+		}	
 	}
-	
 	%>
 	
 	

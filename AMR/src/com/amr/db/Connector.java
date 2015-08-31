@@ -12,6 +12,7 @@ import com.amr.data.Azienda;
 import com.amr.data.CountScelte;
 import com.amr.data.Menu;
 import com.amr.data.Piatto;
+import com.amr.data.Prenotazione;
 import com.amr.data.Scelta;
 import com.amr.data.Tavolo;
 import com.amr.data.User;
@@ -141,7 +142,8 @@ public class Connector {
 		    			rs.getInt("ID_tavolo"),
 		    			rs.getString("nome"),
 		    			rs.getInt("postiMin"),
-		    			rs.getInt("postiMax")
+		    			rs.getInt("postiMax"),
+		    			50
 		    			)) ;
 		    }
 		     
@@ -149,6 +151,66 @@ public class Connector {
 			e.printStackTrace();
 		}
 		return tavoli;
+	}
+	
+	public static List<Prenotazione> getPrenotazioniFromGiorno(String giorno){
+		Connection conn = getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		String sqlQuery = "select prenotazione.ID_Prenotazione, cliente.nome, cliente.cognome, tavolo.nome as nome_tav, prenotazione.giorno, prenotazione.fascia, prenotazione.orario, prenotazione.numeropers "
+				+ "from amr.prenotazione join amr.cliente join amr.tavolo "
+				+ "where prenotazione.ID_cliente = cliente.ClienteID and prenotazione.ID_tavolo = tavolo.ID_tavolo and giorno = '"+ giorno + "';";
+		List<Prenotazione> pren = new ArrayList<Prenotazione>();
+		try {
+			stmt = conn.createStatement();
+		    rs = stmt.executeQuery(sqlQuery);
+		    while(rs.next()){
+		    	pren.add(new Prenotazione(
+		    			rs.getInt("ID_prenotazione"),
+		    			rs.getString("Cognome") + " " + rs.getString("Nome"),
+		    			rs.getString("nome_tav"),
+		    			rs.getString("giorno"),
+		    			rs.getInt("fascia"),
+		    			rs.getString("orario"),
+		    			rs.getInt("numeropers")
+		    			)) ;
+		    }
+		     
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return pren;
+	}
+	
+	public static List<Prenotazione> getPrenotazioniFromGiornoAndFascia(String giorno, int fascia){
+		Connection conn = getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
+		String sqlQuery = "select prenotazione.ID_Prenotazione, cliente.nome, cliente.cognome, tavolo.nome as nome_tav, prenotazione.giorno, prenotazione.fascia, prenotazione.orario, prenotazione.numeropers "
+				+ "from amr.prenotazione join amr.cliente join amr.tavolo "
+				+ "where prenotazione.ID_cliente = cliente.ClienteID and prenotazione.ID_tavolo = tavolo.ID_tavolo and giorno = '"+ giorno + "' and fascia = "+ fascia+";";
+		
+		List<Prenotazione> pren = new ArrayList<Prenotazione>();
+		try {
+			stmt = conn.createStatement();
+		    rs = stmt.executeQuery(sqlQuery);
+		    while(rs.next()){
+		    	pren.add(new Prenotazione(
+		    			rs.getInt("ID_prenotazione"),
+		    			rs.getString("Cognome") + " " + rs.getString("Nome"),
+		    			rs.getString("nome_tav"),
+		    			rs.getString("giorno"),
+		    			rs.getInt("fascia"),
+		    			rs.getString("orario"),
+		    			rs.getInt("numeropers")
+		    			)) ;
+		    }
+		     
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return pren;
 	}
 	
 	public static Tavolo getTavoloFromId(int idtavolo){
@@ -165,7 +227,8 @@ public class Connector {
 		    			rs.getInt("ID_tavolo"),
 		    			rs.getString("nome"),
 		    			rs.getInt("postiMin"),
-		    			rs.getInt("postiMax")
+		    			rs.getInt("postiMax"),
+		    			50
 		    			) ;
 		    }
 		     

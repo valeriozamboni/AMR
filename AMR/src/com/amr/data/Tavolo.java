@@ -6,8 +6,13 @@ public class Tavolo {
 	private String nome;
 	private int min;
 	private int max;
+	private int diff;
 	
-	public Tavolo(int id, String nome, int min, int max) {
+	public Tavolo(){
+		
+	}
+	
+	public Tavolo(int id, String nome, int min, int max, int diff) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -49,6 +54,14 @@ public String getJson(){
 	}
 	public void setMax(int max) {
 		this.max = max;
+	}
+
+	public int getDiff() {
+		return diff;
+	}
+
+	public void setDiff(int diff) {
+		this.diff = diff;
 	}
 	
 	

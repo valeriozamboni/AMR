@@ -37,8 +37,8 @@ public class Login extends HttpServlet {
 	    User user = Connector.getUserFromCredentials(email, pass);
    
 	    if(user == null){
-	    RequestDispatcher view = request.getRequestDispatcher("login.jsp");
-	    request.setAttribute("error", true);
+	    	RequestDispatcher view = request.getRequestDispatcher("login.jsp");
+	    	request.setAttribute("error", true);
 		    view.forward(request, response);
 	    }else{
 	    	request.setAttribute("user", user);

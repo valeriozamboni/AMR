@@ -16,27 +16,22 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<link href="style.css" rel="stylesheet" type="text/css">
 	
-		<link href="bootstrap.min.css" rel="stylesheet" type="text/css">
 	
 
   </head>
   <body>
   <jsp:useBean id="utente" scope="session" class="com.amr.data.User"/>
   <%
-  boolean admin = false;
-  String pass = null;
-  
+  boolean admin = true;
+  boolean affiliato = true;
   if(utente.getEmail() != null){
 	  admin = utente.isAdmin();
-	  pass = utente.getPass();
+	  affiliato = utente.isAffiliato();
   }else{
 	  %>
 	  <jsp:forward page="login.jsp" />
 	  <%
   }
-  
-  //User user = (User)request.getAttribute("user"); 
-  //boolean admin = user.isAdmin();
   %>
   <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-fixed-top">
@@ -52,38 +47,49 @@
     </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-			<li id="sel_menu"><a href="#">Seleziona Menu</a></li>
+			
 		
-		<li id="prenotazioni" class="dropdown">
+		<li id="prenotazioni-usr" class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prenotazioni <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Prenota Tavolo</a></li>
-            <li><a href="#">Elimina Prenotazione</a></li>
+            <li><a href="PrenotaTavolo.jsp">Prenota Tavolo</a></li>
+            <li><a href="#">Le mie prenotazioni</a></li>
           </ul>
         </li>
 		
-		<li id="gest_menu" class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestisci Menu Affiliati<span class="caret"></span></a>
+		<li id="menu-aff" class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Menu Affiliati<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="creamenu.jsp">Crea Menu</a></li>
-			<li><a href="#">Modifica Menu</a></li>
-            <li><a href="#">Elimina Menu</a></li>
+            <li id="gest_creamenù"><a href="selezionamenu.jsp">Seleziona Menu</a></li>
+			<li><a href="#">I miei Menu</a></li>
           </ul>
         </li>
 		
-		<li id="gest_tavoli" class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestisci Tavoli<span class="caret"></span></a>
+		<li id="gest-tavoli" class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestione Tavoli<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Crea Tavolo</a></li>
-			<li><a href="#">Modifica Tavolo</a></li>
-            <li><a href="#">Elimina Tavolo</a></li>
+            <li><a href="aggiungitavolo.jsp">Crea Tavolo</a></li>
+			<li><a href="#">I miei tavoli</a></li>
           </ul>
         </li>
-					<li id="gest_affilia"><a href="affiliaazienda.jsp">Affilia Azienda</a></li>
-					<li id="vis_scelte"><a href="visualizzascelte.jsp">Visualizza Scelte</a></li>
-		
-		
-			
+        <li id="prenotazioni-admin" class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestione Prenotazioni<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="visualizzaprenotazioni.jsp">Visualizza Prenotazioni</a></li>
+			<li><a href="PrenotaTavolo.jsp">Inserisci Prenotazione</a></li>
+          </ul>
+        </li>
+        <li id="menu-admin" class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestione Menu<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="creamenu.jsp">Inserisci Menu</a></li>
+			<li><a href="visualizzascelte.jsp">Visualizza Scelte</a></li>
+			<li><a href="#">I miei menu</a></li>
+          </ul>
+        </li>
+        
+		<li id="affilia"><a href="affiliaazienda.jsp">Affilia Azienda</a></li>
+
           </ul>
 		  
 	
@@ -94,7 +100,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%=utente.getEmail()%> <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Visualizza Profilo</a></li>
+            <li><a href="visualizzaprofilo.jsp">Visualizza Profilo</a></li>
             <li><a href="login.jsp">Logout</a></li>
           </ul>
         </li>
@@ -202,21 +208,30 @@
 
 
 	<script>
-	<%
+		<%
 	if(admin){
+		//Admin hides: prenotazioni-usr, menu-aff
 		%>
 		
-		$("#sel_menu").css('display','none');
-		$("#prenotazioni").css('display','none');
+		$("#menu-aff").css('display','none');
+		$("#prenotazioni-usr").css('display','none');
 	<%
 	}else{
+		
+		//User hides: gest-tavoli, prenotazioni-admin, affilia, menu-admin
 		%>
-		$("#gest_menu").css('display','none');
-		$("#gest_tavoli").css('display','none');
-		$("#gest_affilia").css('display','none');
-	<%
+		
+		$("#gest-tavoli").css('display','none');
+		$("#prenotazioni-admin").css('display','none');
+		$("#affilia").css('display','none');
+		$("#menu-admin").css('display','none');
+		<%
+		if(!affiliato){
+		%>
+			$("#menu-aff").css('display','none');
+		<%
+		}	
 	}
-	
 	%>
 	
 	

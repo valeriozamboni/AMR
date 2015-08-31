@@ -23,7 +23,6 @@
 	
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<link href="style.css" rel="stylesheet" type="text/css">
-		<link href="bootstrap.min.css" rel="stylesheet" type="text/css">
 	
 
   </head>
@@ -31,15 +30,11 @@
   <jsp:useBean id="utente" scope="session" class="com.amr.data.User"/>
   <%
 
-  boolean admin = false;
-  String pass = null;
-  int id = -1;
-
+  boolean admin = true;
+  boolean affiliato = true;
   if(utente.getEmail() != null){
 	  admin = utente.isAdmin();
-	  pass = utente.getPass();
-	  id = utente.getId();
-
+	  affiliato = utente.isAffiliato();
   }else{
 	  %>
 	  <jsp:forward page="login.jsp" />
@@ -63,40 +58,49 @@
     </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-			<li id="sel_menu"><a href="#">Seleziona Menu</a></li>
+			
 		
-		<li id="prenotazioni" class="dropdown">
+		<li id="prenotazioni-usr" class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prenotazioni <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Prenota Tavolo</a></li>
-            <li><a href="#">Elimina Prenotazione</a></li>
+            <li><a href="PrenotaTavolo.jsp">Prenota Tavolo</a></li>
+            <li><a href="#">Le mie prenotazioni</a></li>
           </ul>
         </li>
 		
-		<li id="gest_menu" class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestisci Menu Affiliati<span class="caret"></span></a>
+		<li id="menu-aff" class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Menu Affiliati<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="creamenu.jsp">Crea Menu</a></li>
-			<li><a href="#">Modifica Menu</a></li>
-            <li><a href="#">Elimina Menu</a></li>
+            <li id="gest_creamenù"><a href="selezionamenu.jsp">Seleziona Menu</a></li>
+			<li><a href="#">I miei Menu</a></li>
           </ul>
         </li>
 		
-		<li id="gest_tavoli" class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestisci Tavoli<span class="caret"></span></a>
+		<li id="gest-tavoli" class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestione Tavoli<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Crea Tavolo</a></li>
-			<li><a href="#">Modifica Tavolo</a></li>
-            <li><a href="#">Elimina Tavolo</a></li>
+            <li><a href="aggiungitavolo.jsp">Crea Tavolo</a></li>
+			<li><a href="#">I miei tavoli</a></li>
           </ul>
         </li>
-					<li id="gest_affilia"><a href="affiliaazienda.jsp">Affilia Azienda</a></li>
-					<li id="vis_scelte"><a href="visualizzascelte.jsp">Visualizza Scelte</a></li>
-					
+        <li id="prenotazioni-admin" class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestione Prenotazioni<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="visualizzaprenotazioni.jsp">Visualizza Prenotazioni</a></li>
+			<li><a href="PrenotaTavolo.jsp">Inserisci Prenotazione</a></li>
+          </ul>
+        </li>
+        <li id="menu-admin" class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestione Menu<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="creamenu.jsp">Inserisci Menu</a></li>
+			<li><a href="visualizzascelte.jsp">Visualizza Scelte</a></li>
+			<li><a href="#">I miei menu</a></li>
+          </ul>
+        </li>
+        
+		<li id="affilia"><a href="affiliaazienda.jsp">Affilia Azienda</a></li>
 
-		
-		
-			
           </ul>
 		  
 	
@@ -119,7 +123,7 @@
     <br>
     <div class="row">
      <div class="col-md-6 col-md-offset-3">
-     <h1>Visualizza scelte</h1>
+     <h1>Visualizza prenotazioni</h1>
      </div></div>
 
 	 <br>
@@ -128,7 +132,7 @@
 	<div class="row" id="alert-row" style="display:none">
     <div class="col-md-7 col-md-offset-3">
     <div class="alert alert-warning" >
-  <strong>Attenzione!</strong> Non è stata ancora effettuata alcuna scelta per il giorno selezionato.  Riprova in seguito.
+  <strong>Attenzione!</strong> Non è stata effettuata nessuna prenotazione per il giorno selezionato.  Riprova in seguito.
 </div>
     </div>
     </div>
@@ -150,10 +154,12 @@
    
   
   <div class="form-group">
-    <label class="control-label col-sm-2" for="filtroUt">Filtra per cliente:</label>
+    <label class="control-label col-sm-2" for="filtroF">Filtra per fascia:</label>
     <div class="col-sm-7">
-<select class="form-control" id="filtroUt" name= "filtroUt" >
-      <option value=""> Nessun Cliente selezionato</option>
+<select class="form-control" id="filtroF" name= "filtroF" >
+      <option value=""> Nessuna fascia selezionata</option>
+      <option value="1">Pranzo</option>
+      <option value="2">Cena</option>
       </select>
      </div>
   </div>
@@ -162,43 +168,23 @@
     <div class="col-md-7 col-md-offset-2">
     
     <div id ="fields_div" style="display:none">
-    <input style="display:none" type="text" name="fakeusernameremembered"/>
-<input style="display:none" type="password" name="fakepasswordremembered"/>
     
-    <h2>Primi</h2>
-  <table class="table table-striped" id="primitable">
+    <h2>Prenotazioni</h2>
+  <table class="table table-striped" id="prentable">
     <thead>
       <tr>
-        <th>Nome Piatto</th>
-        <th>Quantità</th>
+        <th>Orario</th>
+        <th>Nome</th>
+        <th>Tavolo</th>
+        <th>Fascia</th>
       </tr>
     </thead>
   </table>
-  <h2>Secondi</h2>
-    <table class="table table-striped" id="seconditable">
-    <thead>
-      <tr>
-        <th>Nome Piatto</th>
-        <th>Quantità</th>
-      </tr>
-    </thead>
-  </table>
-  <h2>Contorni</h2>
-    <table class="table table-striped" id="contornitable">
-    <thead>
-      <tr>
-        <th>Nome Piatto</th>
-        <th>Quantità</th>
-      </tr>
-    </thead>
-  </table>
+
 </div> 
 
 		</div></div>	  
-     
 
-  <input style="display:none" type="text" id="menuid" name="menuid"/>
-  
   <br>
 </form>
   
@@ -222,23 +208,31 @@
 	
 	
 	
-	<%
+		<%
 	if(admin){
+		//Admin hides: prenotazioni-usr, menu-aff
 		%>
 		
-		$("#sel_menu").css('display','none');
-		$("#prenotazioni").css('display','none');
+		$("#menu-aff").css('display','none');
+		$("#prenotazioni-usr").css('display','none');
 	<%
 	}else{
+		
+		//User hides: gest-tavoli, prenotazioni-admin, affilia, menu-admin
 		%>
-		$("#gest_menu").css('display','none');
-		$("#gest_tavoli").css('display','none');
-		$("#gest_affilia").css('display','none');
-	<%
+		
+		$("#gest-tavoli").css('display','none');
+		$("#prenotazioni-admin").css('display','none');
+		$("#affilia").css('display','none');
+		$("#menu-admin").css('display','none');
+		<%
+		if(!affiliato){
+		%>
+			$("#menu-aff").css('display','none');
+		<%
+		}	
 	}
-	
 	%>
-	
 	
 
 	    $(function() {
@@ -247,30 +241,27 @@
 	        		$('#fields_div').css('display','inline');
 	        		
 	        		var date = $('#datepicker').val();
-	        		$('#filtroUt').val("")
-	        		
-	        		$.get("/AMR/GetScelteCount?date="+date, function(responseText) {
+	        		$('#filtroF').val("");	        		
+	        		$.get("/AMR/GetPrenotazioni?date="+date, function(responseText) {
 	        			if(!responseText == ""){
  		        			$('#alert-row').css('display','none');
- 		        			$("#primitable").children().remove()
- 		        			$("#seconditable").children().remove()
- 		        			$("#contornitable").children().remove()
+ 		        			$("#prentable").find("tr:gt(0)").remove();
+ 		        			
  		        			var res = JSON.parse(responseText);
- 	 			       		var primi = res.primi
- 	 			       		var secondi = res.secondi
- 	 			       		var contorni = res.contorni
+ 	 			       		var pren = res.prenotazioni
  	 			       		
- 	 			       		primi.forEach(function(entry) {
- 	 			       			addRow('primitable', entry.nome, entry.count)
+ 	 			       		pren.forEach(function(entry) {
+ 	 			       			console.log(entry)
+ 	 			       			var fas = ""
+ 	 			       			if(entry.fascia == 1){
+ 	 			       				fas = "Pranzo"
+ 	 			       			}else{
+ 	 			       				fas = "Cena"
+ 	 			       			}
+ 	 			       			addRow('prentable', entry.orario, entry.cliente, entry.tavolo, fas)
  	 			       		});
  	 			       		
- 	 			       		secondi.forEach(function(entry) {
-	 			       			addRow('seconditable', entry.nome, entry.count)
-	 			       		});
  	 			       		
- 	 			       		contorni.forEach(function(entry) {
- 			       				addRow('contornitable', entry.nome, entry.count)
- 			       			});
  	 			       		
  	        			}else{
 	        				$('#alert-row').css('display','inline');
@@ -286,7 +277,7 @@
 	    
 
 	    
-	    function addRow(tableId, nome, count) {
+	    function addRow(tableId, orario, nome, tavolo, fas) {
 
 	        var table = document.getElementById(tableId);
 
@@ -294,9 +285,14 @@
 	        var row = table.insertRow(rowCount);
 
 	        var cell3 = row.insertCell(0);
-	       cell3.innerHTML = nome;
-	       var cell4 = row.insertCell(1);
-	       cell4.innerHTML = count;
+	       	cell3.innerHTML = orario;
+	       	var cell4 = row.insertCell(1);
+	       	cell4.innerHTML = nome;
+	       	var cell5 = row.insertCell(2);
+	       	cell5.innerHTML = tavolo;
+
+	       	var cell6 = row.insertCell(3);
+	       	cell6.innerHTML = fas;
 	       
 	}
 	    var usList = <%=Connector.getUtentiList()%>;
@@ -309,37 +305,37 @@
 	      		}
 	    );
 	    
-	    $('#filtroUt').change(function(){
-	    	var id = $('#filtroUt').val();
+	    $('#filtroF').change(function(){
+	    	var id = $('#filtroF').val();
 	    	var date = $('#datepicker').val()
 	    	if($('#filtroUt').val() == ""){
         		$.get("/AMR/GetScelteCount?date="+date, function(responseText) {
-        			if(!responseText == ""){
-		        			$('#alert-row').css('display','none');
-		        			$("#primitable").children().remove()
-		        			$("#seconditable").children().remove()
-		        			$("#contornitable").children().remove()
-		        			var res = JSON.parse(responseText);
-	 			       		var primi = res.primi
-	 			       		var secondi = res.secondi
-	 			       		var contorni = res.contorni
+        			//if(!responseText == ""){
+// 		        			$('#alert-row').css('display','none');
+// 		        			$("#primitable").children().remove()
+// 		        			$("#seconditable").children().remove()
+// 		        			$("#contornitable").children().remove()
+// 		        			var res = JSON.parse(responseText);
+// 	 			       		var primi = res.primi
+// 	 			       		var secondi = res.secondi
+// 	 			       		var contorni = res.contorni
 	 			       		
-	 			       		primi.forEach(function(entry) {
-	 			       			addRow('primitable', entry.nome, entry.count)
-	 			       		});
+// 	 			       		primi.forEach(function(entry) {
+// 	 			       			addRow('primitable', entry.nome, entry.count)
+// 	 			       		});
 	 			       		
-	 			       		secondi.forEach(function(entry) {
- 			       			addRow('seconditable', entry.nome, entry.count)
- 			       		});
+// 	 			       		secondi.forEach(function(entry) {
+//  			       			addRow('seconditable', entry.nome, entry.count)
+//  			       		});
 	 			       		
-	 			       		contorni.forEach(function(entry) {
-			       				addRow('contornitable', entry.nome, entry.count)
-			       			});
+// 	 			       		contorni.forEach(function(entry) {
+// 			       				addRow('contornitable', entry.nome, entry.count)
+// 			       			});
 	 			       		
-	        			}else{
-        				$('#alert-row').css('display','inline');
-						$('#fields_div').css('display','none');
-	        			}
+// 	        			}else{
+//         				$('#alert-row').css('display','inline');
+// 						$('#fields_div').css('display','none');
+// 	        			}
         			
         			
                 });
@@ -347,20 +343,32 @@
 	    		
 	    	}else{
 	    		
-		    	$.get("/AMR/GetScelteCount?date="+date+"&id="+id, function(res) {
-		    		$("#primitable").children().remove()
-		    		$("#seconditable").children().remove()
-		    		$("#contornitable").children().remove()
-		    		if(res.length > 0){
-		    		console.log(res)
-		    		var entry = JSON.parse(res);
-		    		console.log("entry.length" + entry.length + " entry.primi.length " + entry.primi.length)
-		    		console.log(entry)
-		    		
-			       	addRow('primitable', entry.primi[0].nome, entry.primi[0].count)
-			       	addRow('seconditable', entry.secondi[0].nome, entry.secondi[0].count)      	
-		       		addRow('contornitable', entry.contorni[0].nome, entry.contorni[0].count)
-		    		}
+		    	$.get("/AMR/GetPrenotazioni?date="+date+"&fascia="+id, function(responseText) {
+		    		if(!responseText == ""){
+		        			$('#alert-row').css('display','none');
+		        			$("#prentable").find("tr:gt(0)").remove();
+		        			
+		        			var res = JSON.parse(responseText);
+	 			       		var pren = res.prenotazioni
+	 			       		
+	 			       		pren.forEach(function(entry) {
+	 			       			console.log(entry)
+	 			       			var fas = ""
+	 			       			if(entry.fascia == 1){
+	 			       				fas = "Pranzo"
+	 			       			}else{
+	 			       				fas = "Cena"
+	 			       			}
+	 			       			addRow('prentable', entry.orario, entry.cliente, entry.tavolo, fas)
+	 			       		});
+	 			       		
+	 			       		
+	 			       		
+	        			}else{
+	        			$("#prentable").find("tr:gt(0)").remove();
+        				$('#alert-row').css('display','inline');
+						//$('#fields_div').css('display','none');
+	        			}
 		    	}
 		    	
 		    	);
